@@ -1,33 +1,53 @@
+
+
 const express = require("express");
 const router = express.Router();
 const carController = require("../controllers/carController");
-const verifyToken = require("../middleware/auth");
-
-// المسارات
-router.get("/", carController.getAllCars);       // جلب جميع السيارات
-router.get("/:id", carController.getCarById);   // جلب سيارة معينة
-// router.post("/", carController.createCar);      // إضافة سيارة جديدة
-// router.put("/:id", carController.updateCar);    // تعديل بيانات سيارة
-router.delete("/:id", carController.deleteCar); // حذف سيارة
+const { protect, isAdmin } = require("../middleware/auth");
 
 
+// Multer setup
+const multer = require("multer");
+const upload = multer({ dest: "uploads/" }); // You can customize this
 
-// إضافة سيارة جديدة فقط للبائعين
-router.post("/", verifyToken, (req, res, next) => {
-    if (req.userRole !== "seller") {
-        return res.status(403).json({ message: "غير مسموح لك بإضافة سيارة" });
-    }
-    next();
-}, carController.createCar);
+
+// إرسال سيارة جديدة من المستخدم
+// router.post("/submit", protect, upload.single("images"), carController.submitCarRequest);
+router.post("/submit", protect, upload.array("images", 5), carController.submitCarRequest);
+
+// مستخدم عادي يضيف سيارة
+router.post("/add", protect, carController.addCar);
 
 
 
-// تعديل سيارة فقط للبائعين
-router.put("/:id", verifyToken, (req, res, next) => {
-    if (req.userRole !== "seller") {
-        return res.status(403).json({ message: "غير مسموح لك بتعديل السيارة" });
-    }
-    next();
-}, carController.updateCar);
+// فقط الأدمن يشوف السيارات المعلقة
+router.get("/pending", protect, isAdmin, carController.getPendingCars);
+
+// الأدمن يوافق أو يرفض سيارة
+router.patch("/status/:id", protect, isAdmin, carController.approveOrRejectCar);
+
+// الأدمن يعدّل معلومات السيارة
+router.put("/admin/update/:id", protect, isAdmin, carController.updateCarByAdmin);
+
+// المستخدم يرسل سيارة
+router.post("/submit", protect, carController.submitCarRequest); // ✅ صح
+
+
+// عرض السيارات المعلقة
+router.get("/pending", protect, isAdmin, carController.getPendingCars);
+
+
+// الأدمن يوافق على السيارة ويعدلها
+router.put("/approve/:id", protect, isAdmin, carController.approveAndEditCar);
+
+//بجيب كل السيارات من api مع فلتره
+// router.get("/all", protect, isAdmin, carController.getAllCars);
+
+router.get("/all", protect, isAdmin, carController.getAllCarsForAdmin);
+
+router.get("/:id", protect, carController.getCarById);
+
+router.get('/approved-cars/:id', carController.getApprovedCars);////
 
 module.exports = router;
+

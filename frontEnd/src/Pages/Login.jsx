@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { motion } from 'framer-motion';
 import axios from "axios";
 import { useNavigate,Link } from "react-router-dom";
+import Swal from 'sweetalert2';
 
 const LoginPage = () => {
   const [email, setEmail] = useState('');
@@ -15,21 +16,55 @@ const LoginPage = () => {
     setIsVisible(true);
   }, []);
 
+  // const handleSubmit = async (e) => {
+  //   e.preventDefault();
+  //   console.log('Login attempt:', { email, password, rememberMe });
+    
+  //   try {
+  //     const res = await axios.post(
+  //       "http://localhost:5000/api/users/login",
+  //       { email, password }, // البيانات
+  //       { withCredentials: true } // إعدادات الطلب
+  //     );
+
+  //     localStorage.setItem("token", res.data.token);
+  //     alert("تم تسجيل الدخول بنجاح!");
+  //     navigate("/");
+  //   } catch (error) {
+  //     alert("خطأ في تسجيل الدخول: " + (error.response?.data?.message || "حدث خطأ"));
+  //   }
+  // };
+
+
   const handleSubmit = async (e) => {
     e.preventDefault();
     console.log('Login attempt:', { email, password, rememberMe });
-    
+  
     try {
       const res = await axios.post(
         "http://localhost:5000/api/users/login",
-        { email, password }, // البيانات
-        { withCredentials: true } // إعدادات الطلب
+        { email, password },
+        { withCredentials: true }
       );
-
-      alert("تم تسجيل الدخول بنجاح!");
-      navigate("/");
+  
+      localStorage.setItem("token", res.data.token);
+  
+      Swal.fire({
+        icon: 'success',
+        title: 'Success',
+        text: 'You have logged in successfully!',
+        confirmButtonText: 'OK'
+      }).then(() => {
+        navigate("/");
+      });
+  
     } catch (error) {
-      alert("خطأ في تسجيل الدخول: " + (error.response?.data?.message || "حدث خطأ"));
+      Swal.fire({
+        icon: 'error',
+        title: 'Login Failed',
+        text: error.response?.data?.message || "An unexpected error occurred",
+        confirmButtonText: 'OK'
+      });
     }
   };
 

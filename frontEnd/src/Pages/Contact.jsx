@@ -1,5 +1,7 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import { Phone, Mail, Map, ArrowUp, ChevronUp, ChevronDown } from 'lucide-react';
+import { FaComments, FaTimes } from 'react-icons/fa';
+import Swal from 'sweetalert2';
 
 const ContactPage = () => {
   // إدارة الحالة للمدخلات
@@ -14,6 +16,53 @@ const ContactPage = () => {
   
   // حالة لأسئلة الـ FAQ - تغيير المتغير ليتوافق مع الستايل الجديد
   const [expandedFaq, setExpandedFaq] = useState(null);
+  
+  // Chatbot states
+  const [showChatbot, setShowChatbot] = useState(false);
+  const [chatMessage, setChatMessage] = useState('');
+  const [chatHistory, setChatHistory] = useState([
+    { sender: 'bot', message: 'Hello! How can I help you with our classic cars today?' }
+  ]);
+  
+  // Reference for auto-scrolling chat
+  const chatContainerRef = useRef(null);
+
+  // Auto-scroll chat to bottom when messages change
+  useEffect(() => {
+    if (chatContainerRef.current) {
+      chatContainerRef.current.scrollTop = chatContainerRef.current.scrollHeight;
+    }
+  }, [chatHistory]);
+
+  // Handle chat submission
+  const handleChatSubmit = (e) => {
+    e.preventDefault();
+    if (!chatMessage.trim()) return;
+
+    // Add user message to chat
+    const newChatHistory = [
+      ...chatHistory,
+      { sender: 'user', message: chatMessage }
+    ];
+    
+    setChatHistory(newChatHistory);
+    setChatMessage('');
+
+    // Simulate bot response after a short delay
+    setTimeout(() => {
+      const botResponses = [
+        "Thank you for your interest! Our classic car experts will get back to you soon.",
+        "We have a wide selection of classic cars available. Can you tell me what you're looking for?",
+        "Our restoration services are top-notch. Would you like to schedule a consultation?",
+        "We offer worldwide shipping for all our classic cars. Shipping costs depend on the destination.",
+        "Yes, we do offer financing options for qualified buyers through our partner institutions."
+      ];
+      
+      const randomResponse = botResponses[Math.floor(Math.random() * botResponses.length)];
+      
+      setChatHistory([...newChatHistory, { sender: 'bot', message: randomResponse }]);
+    }, 1000);
+  };
 
   // دالة لتحديث القيم عند التغيير
   const handleChange = (e) => {
@@ -40,13 +89,28 @@ const ContactPage = () => {
   
       const data = await response.json();
       if (response.ok) {
-        alert('تم إرسال رسالتك بنجاح!');
+        Swal.fire({
+          icon: 'success',
+          title: 'Message Sent',
+          text: 'Your message has been sent successfully!',
+          confirmButtonText: 'OK'
+        });
         setFormData({ name: '', email: '', message: '' });
       } else {
-        alert(data.message);
+        Swal.fire({
+          icon: 'error',
+          title: 'Failed to Send',
+          text: data.message || 'Something went wrong!',
+          confirmButtonText: 'OK'
+        });
       }
     } catch (error) {
-      alert('حدث خطأ أثناء الإرسال، حاول مرة أخرى!');
+      Swal.fire({
+        icon: 'error',
+        title: 'Error',
+        text: 'An error occurred while sending the message. Please try again!',
+        confirmButtonText: 'OK'
+      });
     }
   };
   
@@ -246,9 +310,80 @@ const ContactPage = () => {
         </div>
       </div>
 
+
+
+
+
+      {/* Chatbot Button */}
+      <button
+        onClick={() => setShowChatbot(!showChatbot)}
+        className="fixed bottom-24 left-6 bg-green-600 text-white p-4 rounded-full shadow-lg hover:bg-green-700 transition duration-300 z-40"
+        aria-label={showChatbot ? "Close chat" : "Open chat"}
+      >
+        {showChatbot ? <FaTimes size={24} /> : <FaComments size={24} />}
+      </button>
+     
+
+
+
+
+      {/* Chatbot Panel */}
+      {showChatbot && (
+        <div className="fixed bottom-40 left-6 w-80 bg-gray-800 rounded-lg shadow-xl overflow-hidden z-40 animate-slide-up">
+          <div className="bg-green-600 p-4">
+            <h3 className="font-bold text-white">Classic Car Concierge</h3>
+            <p className="text-sm text-amber-100">Ask us anything about our collection</p>
+          </div>
+         
+          <div 
+            ref={chatContainerRef}
+            className="h-80 overflow-y-auto p-4 bg-gray-900" 
+            style={{scrollBehavior: 'smooth'}}
+          >
+            {chatHistory.map((chat, index) => (
+              <div
+                key={index}
+                className={`mb-3 ${chat.sender === 'user' ? 'text-right' : 'text-left'}`}
+              >
+                <div
+                  className={`inline-block p-3 rounded-lg ${
+                    chat.sender === 'user'
+                      ? 'bg-green-600 text-white rounded-br-none'
+                      : 'bg-gray-700 text-white rounded-bl-none'
+                  }`}
+                >
+                  {chat.message}
+                </div>
+              </div>
+            ))}
+          </div>
+         
+          <form onSubmit={handleChatSubmit} className="p-3 border-t border-gray-700 flex">
+            <input
+              type="text"
+              value={chatMessage}
+              onChange={(e) => setChatMessage(e.target.value)}
+              placeholder="Type your message..."
+              className="flex-1 bg-gray-700 text-white rounded-l p-2 outline-none"
+            />
+            <button
+              type="submit"
+              className="bg-green-600 text-white px-4 rounded-r hover:bg-green-700 transition"
+            >
+              Send
+            </button>
+          </form>
+        </div>
+      )}
+
+
+
+
+
+
       {/* زر WhatsApp الثابت في الزاوية السفلية اليمنى */}
       <a 
-        href="https://wa.me/5551234567" 
+        href="https://wa.me/+962787491703" 
         target="_blank" 
         rel="noopener noreferrer" 
         className="fixed bottom-20 right-6 z-10 w-14 h-14 rounded-full bg-green-500 flex items-center justify-center shadow-lg hover:bg-green-600 transition-colors"
@@ -258,18 +393,58 @@ const ContactPage = () => {
         </svg>
       </a>
 
-      {/* زر العودة للأعلى */}
-      {showBackToTop && (
-        <button 
-          onClick={scrollToTop}
-          className="fixed bottom-6 right-6 z-10 w-12 h-12 rounded-full bg-gray-800 dark:bg-gray-600 flex items-center justify-center shadow-lg hover:bg-green-600 transition-colors"
-          aria-label="Back to top"
-        >
-          <ArrowUp className="h-6 w-6 text-white" />
-        </button>
-      )}
-    </div>
-  );
+
+
+
+
+
+
+      {/* Back to top button */}
+            {showBackToTop && (
+              <button 
+                onClick={scrollToTop}
+                className="fixed bottom-6 right-6 z-10 w-12 h-12 rounded-full bg-gray-800 dark:bg-gray-600 flex items-center justify-center shadow-lg hover:bg-green-600 transition-colors"
+                aria-label="Back to top"
+              >
+                <ArrowUp className="h-6 w-6 text-white" />
+              </button>
+            )}
+
+
+
+
+
+
+    {/* Map Section */}
+    <div className="py-16 px-4 max-w-7xl mx-auto">
+        <div className="bg-white dark:bg-gray-800 rounded-xl shadow-xl overflow-hidden">
+          <h2 className="font-[cursive] text-5xl font-bold mb-8 p-8 text-center dark:text-white">
+            Our Location
+          </h2>
+          <div className="h-96 w-full">
+            <iframe
+              src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3381.3895895885753!2d36.08776962490851!3d32.05870992034881!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x151b65cd4d8f17e1%3A0x30e86b8a97e4ac7d!2sOrange%20Digital%20Village%20Zarqa!5e0!3m2!1sar!2sjo!4v1742754671002!5m2!1sar!2sjo"
+              width="100%"
+              height="100%"
+              style={{ border: 0 }}
+              allowFullScreen
+              loading="lazy"
+              referrerPolicy="no-referrer-when-downgrade"
+              title="Our Location"
+              className="rounded-lg"
+            ></iframe>
+          </div>
+        </div>
+      </div>
+
+
+
+
+
+ 
+    
+  </div>
+);
 };
 
 export default ContactPage;

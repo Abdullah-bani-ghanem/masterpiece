@@ -2,12 +2,15 @@ import React, { useState, useEffect } from 'react';
 import { motion } from 'framer-motion';
 import axios from "axios";
 import { useNavigate } from "react-router-dom";
+import Swal from 'sweetalert2';
 
 const RegisterPage = () => {
   const [formData, setFormData] = useState({
     fullName: '',
     email: '',
     password: '',
+    phoneNumber: '',
+    role: '',
     confirmPassword: ''
   });
   const [isVisible, setIsVisible] = useState(false);
@@ -29,27 +32,47 @@ const RegisterPage = () => {
   const handleSubmit = async (e) => {
     e.preventDefault();
     console.log(formData);
-    // بسيط للتحقق من تطابق كلمات المرور
+  
+    // Simple password match check
     if (formData.password !== formData.confirmPassword) {
-      alert("كلمات المرور غير متطابقة!");
+      Swal.fire({
+        icon: 'warning',
+        title: 'Password Mismatch',
+        text: 'Passwords do not match!',
+        confirmButtonText: 'OK'
+      });
       return;
     }
-    
+  
     try {
       const res = await axios.post(
         "http://localhost:5000/api/users/register",
         {
           name: formData.fullName,
           email: formData.email,
-          password: formData.password
+          password: formData.password,
+          phoneNumber: formData.phoneNumber,
+          role: formData.role,
         },
         { withCredentials: true }
       );
-
-      alert("تم التسجيل بنجاح!");
-      navigate("/login");
+  
+      Swal.fire({
+        icon: 'success',
+        title: 'Registration Successful',
+        text: 'You have registered successfully!',
+        confirmButtonText: 'OK'
+      }).then(() => {
+        navigate("/login");
+      });
+  
     } catch (error) {
-      alert("خطأ في التسجيل: " + (error.response?.data?.message || "حدث خطأ"));
+      Swal.fire({
+        icon: 'error',
+        title: 'Registration Failed',
+        text: error.response?.data?.message || "An unexpected error occurred",
+        confirmButtonText: 'OK'
+      });
     }
   };
 
@@ -196,6 +219,53 @@ const RegisterPage = () => {
                   placeholder="Enter your email"
                 />
               </motion.div>
+              
+              {/* New Phone Number Field */}
+              <motion.div variants={itemVariants}>
+                <label htmlFor="phone-number" className="block text-sm font-medium text-gray-700">
+                  Phone Number
+                </label>
+                <input
+                  id="phone-number"
+                  name="phoneNumber"
+                  type="tel"
+                  required
+                  value={formData.phoneNumber}
+                  onChange={handleChange}
+                  className="appearance-none rounded-md relative block w-full px-3 py-2 border border-gray-300 placeholder-gray-500 text-gray-900 focus:outline-none focus:ring-green-500 focus:border-green-500 focus:z-10 sm:text-sm"
+                  placeholder="Enter your phone number"
+                  pattern="[0-9]{10}" // Example: Enforces 10-digit phone number
+                />
+              </motion.div>
+
+{/* New Role Field */}
+<motion.div variants={itemVariants}>
+                <label htmlFor="role" className="block text-sm font-medium text-gray-700">
+                  Role
+                </label>
+                <select
+                  id="role"
+                  name="role"
+                  required
+                  value={formData.role}
+                  onChange={handleChange}
+                  className="appearance-none rounded-md relative block w-full px-3 py-2 border border-gray-300 placeholder-gray-500 text-gray-900 focus:outline-none focus:ring-green-500 focus:border-green-500 focus:z-10 sm:text-sm"
+                >
+                  <option value="">Select your role</option>
+                  <option value="user">User</option>
+                  <option value="admin">Admin</option>
+                 
+                </select>
+              </motion.div>
+
+
+
+
+
+
+
+
+
               
               <motion.div variants={itemVariants}>
                 <label htmlFor="password" className="block text-sm font-medium text-gray-700">

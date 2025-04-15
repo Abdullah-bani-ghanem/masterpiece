@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { Phone, ArrowUp, ChevronDown, ChevronUp } from 'lucide-react';
+import { FaComments, FaTimes } from 'react-icons/fa';
 
 function About() {
   // State to track whether the expanded text is shown
@@ -8,6 +9,12 @@ function About() {
   const [showBackToTop, setShowBackToTop] = useState(false);
   // State to track which FAQ is expanded
   const [expandedFaq, setExpandedFaq] = useState(null);
+  // Chatbot states
+  const [showChatbot, setShowChatbot] = useState(false);
+  const [chatMessage, setChatMessage] = useState('');
+  const [chatHistory, setChatHistory] = useState([
+    { sender: 'bot', message: 'Hello! How can I help you with our classic cars today?' }
+  ]);
 
   // Function to toggle the text visibility
   const toggleText = () => {
@@ -45,6 +52,52 @@ function About() {
   // Function to open WhatsApp
   const openWhatsApp = () => {
     window.open('https://wa.me/1234567890', '_blank');
+  };
+
+  // Function to handle chat submission
+  const handleChatSubmit = (e) => {
+    e.preventDefault();
+    if (!chatMessage.trim()) return;
+
+    // Add user message to chat history
+    const updatedChat = [...chatHistory, { sender: 'user', message: chatMessage }];
+    setChatHistory(updatedChat);
+    
+    // Clear input field
+    setChatMessage('');
+    
+    // Simulate bot response after a short delay
+    setTimeout(() => {
+      const botResponse = getBotResponse(chatMessage);
+      setChatHistory([...updatedChat, { sender: 'bot', message: botResponse }]);
+      
+      // Scroll to the bottom of chat
+      const chatContainer = document.querySelector('.overflow-y-auto');
+      if (chatContainer) {
+        chatContainer.scrollTop = chatContainer.scrollHeight;
+      }
+    }, 800);
+  };
+
+  // Simple bot response function
+  const getBotResponse = (msg) => {
+    msg = msg.toLowerCase();
+    
+    if (msg.includes('hello') || msg.includes('hi') || msg.includes('hey')) {
+      return 'Hello! How can I help you with classic cars today?';
+    } else if (msg.includes('price') || msg.includes('cost') || msg.includes('how much')) {
+      return 'Our classic cars range from $25,000 to $500,000 depending on make, model, year, and condition. Can I help you find something specific?';
+    } else if (msg.includes('collection') || msg.includes('inventory') || msg.includes('cars')) {
+      return 'We have a diverse collection of classic cars from the 1930s to the 1980s, including brands like Jaguar, Porsche, Ferrari, Chevrolet, Ford, and many more!';
+    } else if (msg.includes('sell') || msg.includes('selling')) {
+      return 'Were always interested in acquiring quality classic cars. Please provide details about your vehicle, and we can arrange an assessment.';
+    } else if (msg.includes('restoration') || msg.includes('restore')) {
+      return 'We offer professional restoration services with our team of expert craftsmen who specialize in authentic restorations using period-correct methods.';
+    } else if (msg.includes('contact') || msg.includes('reach')) {
+      return 'You can contact us via phone at +1234567890, through our WhatsApp, or by visiting our showroom at Classic Avenue, Vintage City.';
+    } else {
+      return 'Thanks for your message. Our classic car specialist will get back to you soon with more information. Is there anything specific about our collection youd like to know?';
+    }
   };
 
   // Short and full versions of the text
@@ -161,7 +214,7 @@ function About() {
         </div>
       </div>
 
-      {/* زر WhatsApp الثابت في الزاوية السفلية اليمنى */}
+      {/* WhatsApp button */}
       <a 
         href="https://wa.me/+962787491703" 
         target="_blank" 
@@ -173,7 +226,11 @@ function About() {
         </svg>
       </a>
 
-      {/* زر العودة للأعلى  */}
+
+
+
+
+      {/* Back to top button */}
       {showBackToTop && (
         <button 
           onClick={scrollToTop}
@@ -183,7 +240,63 @@ function About() {
           <ArrowUp className="h-6 w-6 text-white" />
         </button>
       )}
-            
+      
+
+
+
+
+      {/* Chatbot Button */}
+      <button
+        onClick={() => setShowChatbot(!showChatbot)}
+        className="fixed bottom-24 left-6 bg-green-600 text-white p-4 rounded-full shadow-lg hover:bg-green-700 transition duration-300 z-40"
+      >
+        {showChatbot ? <FaTimes size={24} /> : <FaComments size={24} />}
+      </button>
+     
+      {/* Chatbot Panel */}
+      {showChatbot && (
+        <div className="fixed bottom-40 left-6 w-80 bg-gray-800 rounded-lg shadow-xl overflow-hidden z-40 animate-slide-up">
+          <div className="bg-green-600 p-4">
+            <h3 className="font-bold">Classic Car Concierge</h3>
+            <p className="text-sm text-amber-100">Ask us anything about our collection</p>
+          </div>
+         
+          <div className="h-80 overflow-y-auto p-4" style={{scrollBehavior: 'smooth'}}>
+            {chatHistory.map((chat, index) => (
+              <div
+                key={index}
+                className={`mb-3 ${chat.sender === 'user' ? 'text-right' : 'text-left'}`}
+              >
+                <div
+                  className={`inline-block p-3 rounded-lg ${
+                    chat.sender === 'user'
+                      ? 'bg-green-600 text-white rounded-br-none'
+                      : 'bg-gray-700 text-white rounded-bl-none'
+                  }`}
+                >
+                  {chat.message}
+                </div>
+              </div>
+            ))}
+          </div>
+         
+          <form onSubmit={handleChatSubmit} className="p-3 border-t border-gray-700 flex">
+            <input
+              type="text"
+              value={chatMessage}
+              onChange={(e) => setChatMessage(e.target.value)}
+              placeholder="Type your message..."
+              className="flex-1 bg-gray-700 rounded-l p-2 outline-none"
+            />
+            <button
+              type="submit"
+              className="bg-green-600 text-white px-4 rounded-r"
+            >
+              Send
+            </button>
+          </form>
+        </div>
+      )}
     </>
   );
 }

@@ -1,117 +1,6 @@
-// import React from 'react'
-// import CarItem from '../Component/carsCard'
-// import ford from "../img/car3.png";
-// import car2 from "../img/car4.png";
-// import car5 from "../img/car5.png";
-
-// function Cars() {
-  
-//   return (
-//     <div className="min-h-screen bg-gray-900 text-white">
-//     <br />
-//     <h1 className="ml-15 text-4xl font-bold text-white mb-4 font-[cursive]">
-//       Discover Your Perfect Classic Car — Timeless Style, Unmatched Performance!
-//     </h1>
-
-//     <p className="ml-160 text-lg text-gray-300 max-w-xl mb-6 font-[cursive]">
-//       "Available Cars for Sale"
-//     </p>
-
-//       <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
-
-//         <CarItem
-//           image={ford}
-//           title="2020 Toyota Corolla"
-//           price="$15,000"
-//           mileage="30,000 miles"
-//           detailsLink="#"
-//         />
-
-
-//         <CarItem
-//           image={car2}
-//           title="2020 Toyota Corolla"
-//           price="$15,000"
-//           mileage="30,000 miles"
-//           detailsLink="#"
-//         />
-
-
-//         <CarItem
-//           image={car5}
-//           title="2020 Toyota Corolla"
-//           price="$15,000"
-//           mileage="30,000 miles"
-//           detailsLink="#"
-//         />
-
-
-//         <CarItem
-//           image={ford}
-//           title="2020 Toyota Corolla"
-//           price="$15,000"
-//           mileage="30,000 miles"
-//           detailsLink="#"
-//         />
-
-
-//         <CarItem
-//           image={car2}
-//           title="2020 Toyota Corolla"
-//           price="$15,000"
-//           mileage="30,000 miles"
-//           detailsLink="#"
-//         />
-
-
-//         <CarItem
-//           image={car5}
-//           title="2020 Toyota Corolla"
-//           price="$15,000"
-//           mileage="30,000 miles"
-//           detailsLink="#"
-//         />
-
-
-//         <CarItem
-//           image={ford}
-//           title="2020 Toyota Corolla"
-//           price="$15,000"
-//           mileage="30,000 miles"
-//           detailsLink="#"
-//         />
-
-
-//         <CarItem
-//           image={car2}
-//           title="2020 Toyota Corolla"
-//           price="$15,000"
-//           mileage="30,000 miles"
-//           detailsLink="#"
-//         />
-
-
-//         <CarItem
-//           image={car5}
-//           title="2020 Toyota Corolla"
-//           price="$15,000"
-//           mileage="30,000 miles"
-//           detailsLink="#"
-//         />
-
-//       </div>
-
-//     </div>
-//   )
-// }
-
-// export default Cars
 import React, { useState, useEffect } from 'react';
 import { FaWhatsapp, FaArrowUp, FaSearch, FaFilter, FaComments, FaTimes } from 'react-icons/fa';
-import CarItem from '../Component/carsCard';
-import ford from "../img/car3.png";
-import car2 from "../img/car4.png";
-import car5 from "../img/car5.png";
+import axios from 'axios';
 
 function Cars() {
   const [showBackToTop, setShowBackToTop] = useState(false);
@@ -127,120 +16,30 @@ function Cars() {
     make: '',
     model: '',
   });
-  // Add state for search query
+  // Enhanced search state
   const [searchQuery, setSearchQuery] = useState('');
+  const [searchResults, setSearchResults] = useState([]);
+  const [isSearching, setIsSearching] = useState(false);
 
-  // Fake car data with more details
-  const carsData = [
-    {
-      id: 1,
-      image: ford,
-      title: "1968 Ford Mustang GT",
-      price: "$32,500",
-      mileage: "78,000 miles",
-      year: 1968,
-      make: "Ford",
-      model: "Mustang GT",
-      description: "Beautifully restored classic with original V8 engine. Red exterior with black interior.",
-      detailsLink: "#"
-    },
-    {
-      id: 2,
-      image: car2,
-      title: "1957 Chevrolet Bel Air",
-      price: "$45,000",
-      mileage: "62,000 miles",
-      year: 1957,
-      make: "Chevrolet",
-      model: "Bel Air",
-      description: "Iconic turquoise and white two-tone paint. Fully restored interior with modern audio system.",
-      detailsLink: "#"
-    },
-    {
-      id: 3,
-      image: car5,
-      title: "1963 Jaguar E-Type",
-      price: "$78,900",
-      mileage: "45,300 miles",
-      year: 1963,
-      make: "Jaguar",
-      model: "E-Type",
-      description: "Rare Series 1 model. British racing green with tan leather interior. Recent engine rebuild.",
-      detailsLink: "#"
-    },
-    {
-      id: 4,
-      image: ford,
-      title: "1970 Dodge Charger",
-      price: "$38,500",
-      mileage: "92,000 miles",
-      year: 1970,
-      make: "Dodge",
-      model: "Charger",
-      description: "Iconic American muscle car. Black exterior with matching interior. 440 V8 engine.",
-      detailsLink: "#"
-    },
-    {
-      id: 5,
-      image: car2,
-      title: "1955 Mercedes-Benz 300SL",
-      price: "$125,000",
-      mileage: "58,400 miles",
-      year: 1955,
-      make: "Mercedes-Benz",
-      model: "300SL",
-      description: "Rare gullwing model. Silver exterior with red leather interior. Museum quality restoration.",
-      detailsLink: "#"
-    },
-    {
-      id: 6,
-      image: car5,
-      title: "1969 Chevrolet Camaro SS",
-      price: "$42,000",
-      mileage: "88,200 miles",
-      year: 1969,
-      make: "Chevrolet",
-      model: "Camaro SS",
-      description: "Rally Sport package. Daytona Yellow with black racing stripes. Numbers matching.",
-      detailsLink: "#"
-    },
-    {
-      id: 7,
-      image: ford,
-      title: "1965 Shelby Cobra",
-      price: "$95,500",
-      mileage: "32,600 miles",
-      year: 1965,
-      make: "Shelby",
-      model: "Cobra",
-      description: "Authentic recreation with Carroll Shelby signature. Blue with white racing stripes.",
-      detailsLink: "#"
-    },
-    {
-      id: 8,
-      image: car2,
-      title: "1959 Cadillac Eldorado",
-      price: "$58,000",
-      mileage: "64,700 miles",
-      year: 1959,
-      make: "Cadillac",
-      model: "Eldorado",
-      description: "Iconic tail fins and chrome. Pink exterior with white interior. Full frame-off restoration.",
-      detailsLink: "#"
-    },
-    {
-      id: 9,
-      image: car5,
-      title: "1967 Porsche 911S",
-      price: "$115,000",
-      mileage: "78,300 miles",
-      year: 1967,
-      make: "Porsche",
-      model: "911S",
-      description: "Early short-wheelbase model. Original engine and transmission. Complete service history.",
-      detailsLink: "#"
-    },
-  ];
+  const [cars, setCars] = useState([]);
+  const [loading, setLoading] = useState(true);
+  
+  useEffect(() => {
+    // Fetch data from API
+    const fetchCars = async () => {
+      try {
+        const response = await axios.get('http://localhost:5000/api/cars/approved-cars/1');
+        setCars(response.data);
+        setSearchResults(response.data); // Initialize search results with all cars
+        setLoading(false);
+      } catch (error) {
+        console.error('Error fetching cars:', error);
+        setLoading(false);
+      }
+    };
+
+    fetchCars();
+  }, []);
 
   // Listen for scroll to show/hide back to top button
   useEffect(() => {
@@ -255,6 +54,57 @@ function Cars() {
     window.addEventListener('scroll', handleScroll);
     return () => window.removeEventListener('scroll', handleScroll);
   }, []);
+
+  // Enhanced search effect - runs whenever searchQuery or filters change
+  useEffect(() => {
+    if (cars.length === 0) return; // Skip if no data loaded yet
+    
+    setIsSearching(true);
+    
+    // Debounce search for better performance
+    const searchTimeout = setTimeout(() => {
+      const filteredResults = performSearch(cars, searchQuery, filters);
+      setSearchResults(filteredResults);
+      setIsSearching(false);
+    }, 300);
+    
+    return () => clearTimeout(searchTimeout);
+  }, [searchQuery, filters, cars]);
+  
+  // Enhanced search function that searches all car properties
+  const performSearch = (carsArray, query, filterSettings) => {
+    const searchLower = query.toLowerCase().trim();
+    
+    return carsArray.filter(car => {
+      // Check filters first
+      const priceNum = parseInt(car.price);
+      const matchesFilters = (
+        priceNum >= filterSettings.priceRange[0] &&
+        priceNum <= filterSettings.priceRange[1] &&
+        (filterSettings.year === '' || car.year.toString().includes(filterSettings.year)) &&
+        (filterSettings.make === '' || car.make.toLowerCase().includes(filterSettings.make.toLowerCase())) &&
+        (filterSettings.model === '' || car.model.toLowerCase().includes(filterSettings.model.toLowerCase()))
+      );
+      
+      // If no search query, just return filter results
+      if (searchLower === '') return matchesFilters;
+      
+      // Enhanced search across all car properties
+      const matchesSearch = 
+        car.make?.toLowerCase().includes(searchLower) ||
+        car.model?.toLowerCase().includes(searchLower) ||
+        car.year?.toString().includes(searchLower) ||
+        car.name?.toLowerCase().includes(searchLower) ||
+        car.title?.toLowerCase().includes(searchLower) ||
+        car.description?.toLowerCase().includes(searchLower) ||
+        car.color?.toLowerCase().includes(searchLower) ||
+        car.engine?.toLowerCase().includes(searchLower) ||
+        car.transmission?.toLowerCase().includes(searchLower) ||
+        car.price?.toString().includes(searchLower);
+        
+      return matchesFilters && matchesSearch;
+    });
+  };
 
   // Scroll to top function
   const scrollToTop = () => {
@@ -271,12 +121,12 @@ function Cars() {
 
     // Add user message to chat history
     setChatHistory([...chatHistory, { sender: 'user', message: chatMessage }]);
-    
+
     // Simulate bot response (in a real app, this would call an API)
     setTimeout(() => {
       let botResponse;
       const msg = chatMessage.toLowerCase();
-      
+
       if (msg.includes('price') || msg.includes('cost')) {
         botResponse = "Our classic cars range from $30,000 to $150,000 depending on make, model, and condition. Is there a specific budget you have in mind?";
       } else if (msg.includes('test drive') || msg.includes('see')) {
@@ -286,14 +136,14 @@ function Cars() {
       } else {
         botResponse = "Thanks for your message! One of our classic car specialists will get back to you shortly. Is there anything specific you'd like to know about our collection?";
       }
-      
+
       setChatHistory(prev => [...prev, { sender: 'bot', message: botResponse }]);
     }, 1000);
-    
+
     setChatMessage('');
   };
 
-  // Handle search input change
+  // Handle search input change with immediate feedback
   const handleSearchChange = (e) => {
     setSearchQuery(e.target.value);
   };
@@ -301,31 +151,21 @@ function Cars() {
   // Handle search form submission
   const handleSearchSubmit = (e) => {
     e.preventDefault();
-    // Apply search - already handled by the filtered cars logic
+    // Search is already handled by the useEffect
   };
-
-  // Filter cars function - now includes search query
-  const filteredCars = carsData.filter(car => {
-    const priceNum = parseInt(car.price.replace(/\$|,/g, ''));
-    const matchesFilters = (
-      priceNum >= filters.priceRange[0] && 
-      priceNum <= filters.priceRange[1] &&
-      (filters.year === '' || car.year.toString().includes(filters.year)) &&
-      (filters.make === '' || car.make.toLowerCase().includes(filters.make.toLowerCase())) &&
-      (filters.model === '' || car.model.toLowerCase().includes(filters.model.toLowerCase()))
-    );
-    
-    // Add search functionality
-    const searchLower = searchQuery.toLowerCase();
-    const matchesSearch = searchQuery === '' || 
-      car.make.toLowerCase().includes(searchLower) ||
-      car.model.toLowerCase().includes(searchLower) ||
-      car.year.toString().includes(searchLower) ||
-      car.title.toLowerCase().includes(searchLower) ||
-      car.description.toLowerCase().includes(searchLower);
-    
-    return matchesFilters && matchesSearch;
-  });
+  
+  // Handle filter changes
+  const handleFilterChange = (filterName, value) => {
+    setFilters(prev => ({
+      ...prev,
+      [filterName]: value
+    }));
+  };
+  
+  // Toggle filter panel
+  const toggleFilterPanel = () => {
+    setFilterOpen(!filterOpen);
+  };
 
   return (
     <div className="min-h-screen bg-gradient-to-b from-gray-900 to-gray-800 text-white relative">
@@ -333,251 +173,271 @@ function Cars() {
       <div className="bg-black bg-opacity-70 py-12 px-4 mb-8 relative overflow-hidden">
         <div className="absolute inset-0 opacity-20 bg-[url('../img/hero-bg.jpg')] bg-cover bg-center mix-blend-overlay"></div>
         <div className="max-w-7xl mx-auto relative z-10">
-          <h1 className="text-5xl font-bold mb-6 font-serif tracking-wide text-center bg-clip-text text-transparent bg-gradient-to-r from-amber-400 to-red-500">
+          <h1 className="font-[cursive] text-5xl font-bold mb-6 tracking-wide text-center bg-clip-text text-transparent bg-gradient-to-r from-green-400 to-green-500">
             Classic Cars Collection
           </h1>
-          <p className="text-2xl text-center max-w-3xl mx-auto mb-8 text-gray-100 font-light">
+          <p className="font-[cursive] text-2xl text-center max-w-3xl mx-auto mb-8 text-gray-100 font-light">
             Discover Your Perfect Classic Car — Timeless Style, Unmatched Performance!
           </p>
-          
-          {/* Search Bar - Connected to state */}
+
+          {/* Enhanced Search Bar */}
           <form onSubmit={handleSearchSubmit} className="max-w-2xl mx-auto relative">
-            <input 
-              type="text" 
-              placeholder="Search by make, model, or year..." 
-              className="w-full py-3 px-6 rounded-full bg-gray-800 border border-gray-700 focus:outline-none focus:ring-2 focus:ring-amber-500 text-white"
+            <input
+              type="text"
+              placeholder="Search by make, model, year, color, engine type..."
+              className="w-full py-3 px-6 rounded-full bg-gray-800 border border-gray-700 focus:outline-none focus:ring-2 focus:ring-green-500 text-white"
               value={searchQuery}
               onChange={handleSearchChange}
             />
-            <button type="submit" className="absolute right-3 top-3 text-amber-500">
+            <button type="submit" className="absolute right-3 top-3 text-green-500">
               <FaSearch size={20} />
             </button>
           </form>
-          
+
+          {/* Filter Toggle Button */}
+          <div className="font-[cursive] flex justify-center mt-4">
+            <button 
+              onClick={toggleFilterPanel}
+              className="flex items-center space-x-2 text-green-400 hover:text-green-300 transition-colors"
+            >
+              <FaFilter />
+              <span>{filterOpen ? 'Hide Filters' : 'Show Filters'}</span>
+            </button>
+          </div>
+
+          {/* Expanded Filter Panel */}
+          {filterOpen && (
+            <div className="mt-6 p-6 bg-gray-800 rounded-lg border border-gray-700 max-w-2xl mx-auto">
+              <h3 className="font-[cursive] text-lg font-semibold mb-4 text-green-400">Refine Your Search</h3>
+              
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                <div>
+                  <label className="font-[cursive] block text-sm font-medium text-gray-300 mb-1">Price Range</label>
+                  <div className="flex items-center space-x-2">
+                    <input
+                      type="number"
+                      placeholder="Min"
+                      className="w-full p-2 rounded bg-gray-700 border border-gray-600"
+                      value={filters.priceRange[0]}
+                      onChange={(e) => handleFilterChange('priceRange', [parseInt(e.target.value) || 0, filters.priceRange[1]])}
+                    />
+                    <span>to</span>
+                    <input
+                      type="number"
+                      placeholder="Max"
+                      className="w-full p-2 rounded bg-gray-700 border border-gray-600"
+                      value={filters.priceRange[1]}
+                      onChange={(e) => handleFilterChange('priceRange', [filters.priceRange[0], parseInt(e.target.value) || 50000])}
+                    />
+                  </div>
+                </div>
+                
+                <div>
+                  <label className="font-[cursive] block text-sm font-medium text-gray-300 mb-1">Year</label>
+                  <input
+                    type="text"
+                    placeholder="e.g. 1969"
+                    className="w-full p-2 rounded bg-gray-700 border border-gray-600"
+                    value={filters.year}
+                    onChange={(e) => handleFilterChange('year', e.target.value)}
+                  />
+                </div>
+                
+                <div>
+                  <label className="font-[cursive] block text-sm font-medium text-gray-300 mb-1">Make</label>
+                  <input
+                    type="text"
+                    placeholder="e.g. Ford, Chevrolet"
+                    className="w-full p-2 rounded bg-gray-700 border border-gray-600"
+                    value={filters.make}
+                    onChange={(e) => handleFilterChange('make', e.target.value)}
+                  />
+                </div>
+                
+                <div>
+                  <label className="font-[cursive] block text-sm font-medium text-gray-300 mb-1">Model</label>
+                  <input
+                    type="text"
+                    placeholder="e.g. Mustang, Corvette"
+                    className="w-full p-2 rounded bg-gray-700 border border-gray-600"
+                    value={filters.model}
+                    onChange={(e) => handleFilterChange('model', e.target.value)}
+                  />
+                </div>
+              </div>
+              
+              <div className="mt-4 flex justify-end">
+                <button
+                  onClick={() => setFilters({
+                    priceRange: [0, 50000],
+                    year: '',
+                    make: '',
+                    model: '',
+                  })}
+                  className="font-[cursive] bg-gray-600 hover:bg-gray-500 text-white px-4 py-2 rounded mr-2"
+                >
+                  Reset
+                </button>
+              </div>
+            </div>
+          )}
+
           {/* Quick Stats */}
           <div className="flex justify-center mt-8 space-x-8">
             <div className="text-center">
-              <p className="text-3xl font-bold text-amber-400">25+</p>
-              <p className="text-gray-300">Unique Models</p>
+              <p className="font-[cursive] text-3xl font-bold text-green-400">25+</p>
+              <p className="font-[cursive] text-gray-300">Unique Models</p>
             </div>
             <div className="text-center">
-              <p className="text-3xl font-bold text-amber-400">100%</p>
-              <p className="text-gray-300">Verified History</p>
+              <p className="font-[cursive] text-3xl font-bold text-green-400">100%</p>
+              <p className="font-[cursive] text-gray-300">Verified History</p>
             </div>
             <div className="text-center">
-              <p className="text-3xl font-bold text-amber-400">30-Day</p>
-              <p className="text-gray-300">Guarantee</p>
+              <p className="font-[cursive] text-3xl font-bold text-green-400">30-Day</p>
+              <p className="font-[cursive] text-gray-300">Guarantee</p>
             </div>
           </div>
         </div>
       </div>
-      
+
       <div className="max-w-7xl mx-auto px-4">
-        {/* Filter Section */}
+        {/* Results Section Header */}
         <div className="mb-8 flex justify-between items-center">
-          <p className="text-xl text-amber-400 font-semibold">
-            {filteredCars.length} Available Classic Cars
-            {searchQuery && <span> matching "{searchQuery}"</span>}
-          </p>
-          
-          <button 
-            onClick={() => setFilterOpen(!filterOpen)}
-            className="flex items-center space-x-2 px-4 py-2 rounded-md bg-gray-800 hover:bg-gray-700 transition duration-300"
-          >
-            <FaFilter />
-            <span>Filters</span>
-          </button>
-        </div>
-        
-        {/* Expandable Filter Panel */}
-        {filterOpen && (
-          <div className="mb-8 bg-gray-800 rounded-lg p-6 animate-fade-in">
-            <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-              <div>
-                <label className="block text-sm font-medium text-gray-300 mb-2">Price Range</label>
-                <div className="flex items-center space-x-4">
-                  <input
-                    type="range"
-                    min="0"
-                    max="150000"
-                    step="5000"
-                    value={filters.priceRange[1]}
-                    onChange={(e) => setFilters({...filters, priceRange: [0, parseInt(e.target.value)]})}
-                    className="w-full h-2 bg-gray-700 rounded-lg appearance-none cursor-pointer"
-                  />
-                  <span className="text-amber-400 font-medium">${filters.priceRange[1].toLocaleString()}</span>
-                </div>
-              </div>
-              
-              <div>
-                <label className="block text-sm font-medium text-gray-300 mb-2">Year</label>
-                <input
-                  type="text"
-                  placeholder="e.g. 1965"
-                  value={filters.year}
-                  onChange={(e) => setFilters({...filters, year: e.target.value})}
-                  className="w-full py-2 px-3 rounded bg-gray-700 border border-gray-600 focus:outline-none focus:ring-2 focus:ring-amber-500"
-                />
-              </div>
-              
-              <div>
-                <label className="block text-sm font-medium text-gray-300 mb-2">Make/Model</label>
-                <div className="grid grid-cols-2 gap-2">
-                  <input
-                    type="text"
-                    placeholder="Make"
-                    value={filters.make}
-                    onChange={(e) => setFilters({...filters, make: e.target.value})}
-                    className="w-full py-2 px-3 rounded bg-gray-700 border border-gray-600 focus:outline-none focus:ring-2 focus:ring-amber-500"
-                  />
-                  <input
-                    type="text"
-                    placeholder="Model"
-                    value={filters.model}
-                    onChange={(e) => setFilters({...filters, model: e.target.value})}
-                    className="w-full py-2 px-3 rounded bg-gray-700 border border-gray-600 focus:outline-none focus:ring-2 focus:ring-amber-500"
-                  />
-                </div>
-              </div>
-            </div>
-            
-            <div className="mt-4 flex justify-end">
-              <button 
-                onClick={() => {
-                  setFilters({priceRange: [0, 50000], year: '', make: '', model: ''});
-                  setSearchQuery('');
-                }}
-                className="px-4 py-2 mr-2 rounded bg-gray-700 hover:bg-gray-600 transition duration-300"
-              >
-                Reset All
-              </button>
-              <button 
-                onClick={() => setFilterOpen(false)}
-                className="px-4 py-2 rounded bg-amber-600 hover:bg-amber-700 transition duration-300"
-              >
-                Apply Filters
-              </button>
-            </div>
-          </div>
-        )}
-        
-        {/* No Results Message */}
-        {filteredCars.length === 0 && (
-          <div className="text-center py-12">
-            <h3 className="text-2xl font-bold text-amber-400 mb-4">No matches found</h3>
-            <p className="text-gray-300 mb-6">
-              Try adjusting your search criteria or filters to find classic cars in our collection.
+          <div className="w-full">
+            <p className="font-[cursive] text-5xl text-green-400 font-semibold text-center">
+              Available Classic Cars
             </p>
-            <button 
-              onClick={() => {
-                setFilters({priceRange: [0, 150000], year: '', make: '', model: ''});
-                setSearchQuery('');
-              }}
-              className="px-6 py-3 bg-amber-600 hover:bg-amber-700 rounded-lg transition duration-300"
-            >
-              View All Cars
-            </button>
+            {/* Search results count */}
+            {!loading && (
+              <p className="font-[cursive] text-center text-gray-300 mt-2">
+                {searchResults.length === 0 ? 
+                  "No cars match your search" : 
+                  `Showing ${searchResults.length} ${searchResults.length === 1 ? 'car' : 'cars'}`
+                }
+                {searchQuery && ` for "${searchQuery}"`}
+              </p>
+            )}
+          </div>
+        </div>
+
+        {/* Loading State */}
+        {loading || isSearching ? (
+          <div className="font-[cursive] flex justify-center items-center h-64">
+            <div className="animate-spin rounded-full h-16 w-16 border-t-4 border-green-500"></div>
+          </div>
+        ) : searchResults.length === 0 ? (
+          // No results found
+          <div className="font-[cursive] text-center py-16">
+            <FaSearch size={48} className="mx-auto text-gray-600 mb-4" />
+            <h3 className="text-2xl font-bold text-gray-400 mb-2">No Cars Found</h3>
+            <p className="text-gray-500">Try adjusting your search or filters</p>
+            {searchQuery && (
+              <button
+                onClick={() => setSearchQuery('')}
+                className="mt-4 bg-green-600 hover:bg-green-700 text-white py-2 px-6 rounded-lg transition-colors"
+              >
+                Clear Search
+              </button>
+            )}
+          </div>
+        ) : (
+          /* Cars Grid with Improved Card Design */
+          <div className="font-[cursive] grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-10">
+            {searchResults.map(car => (
+              <div key={car.id} className="bg-gray-800 rounded-lg overflow-hidden transition-all duration-300 hover:scale-105 hover:shadow-xl shadow-lg border border-gray-700 group">
+                <div className="relative">
+                  <img 
+                    src={`http://localhost:5000/uploads/${car.images[0]}`}
+                    alt={car.name} 
+                    className="w-full h-56 object-cover transition-transform duration-500 group-hover:scale-110"
+                  />
+                  <div className="absolute top-0 right-0 bg-green-600 text-white px-4 py-2 rounded-bl-lg font-bold text-lg shadow-md">
+                    ${car.price}
+                  </div>
+                  <div className="absolute bottom-0 left-0 right-0 h-16"></div>
+                </div>
+
+                <div className="p-6">
+                  <h3 className="text-2xl font-bold mb-2 text-green-400">{car.name}</h3>
+                  <div className="flex items-center justify-between mb-3">
+                    <span className="bg-gray-700 text-gray-300 px-3 py-1 rounded-full text-sm">Year: {car.year}</span>
+                    <span className="bg-gray-700 text-gray-300 px-3 py-1 rounded-full text-sm">{car.model}</span>
+                  </div>
+                  
+                  <p className="text-gray-300 mb-4 line-clamp-2">{car.description}</p>
+                  
+                  <div className="mt-4 flex justify-between items-center">
+                    <div className="flex items-center space-x-2">
+                      <div className="h-3 w-3 rounded-full bg-green-500"></div>
+                      <span className="text-sm text-gray-400">Available</span>
+                    </div>
+                    <button className="bg-green-600 hover:bg-green-700 text-white py-2 px-4 rounded-lg transition-colors duration-300 font-medium">
+                      View Details
+                    </button>
+                  </div>
+                </div>
+              </div>
+            ))}
           </div>
         )}
-        
-        {/* Cars Grid with Improved Card Design */}
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 mb-16">
-          {filteredCars.map(car => (
-            <div key={car.id} className="bg-gray-800 rounded-lg overflow-hidden transition-transform duration-300 hover:scale-[1.02] hover:shadow-xl shadow-md">
-              <div className="relative">
-                <img src={car.image} alt={car.title} className="w-full h-48 object-cover" />
-                <div className="absolute top-0 right-0 bg-amber-600 text-white px-3 py-1 rounded-bl-lg font-bold">
-                  {car.price}
-                </div>
-              </div>
-              
-              <div className="p-5">
-                <h3 className="text-xl font-bold mb-2 text-amber-400">{car.title}</h3>
-                <p className="text-gray-300 mb-3">{car.description}</p>
-                
-                <div className="flex justify-between text-sm text-gray-400 mb-4">
-                  <span>Year: {car.year}</span>
-                  <span>{car.mileage}</span>
-                </div>
-                
-                <a 
-                  href={car.detailsLink} 
-                  className="block w-full text-center py-2 bg-gray-700 hover:bg-amber-600 transition duration-300 rounded font-medium"
-                >
-                  View Details
-                </a>
-              </div>
-            </div>
-          ))}
-        </div>
-        
-        {/* Call to Action */}
-        <div className="bg-gradient-to-r from-gray-800 to-gray-900 rounded-xl p-8 mb-16 text-center">
-          <h2 className="text-3xl font-bold mb-4 text-amber-400">Can't find what you're looking for?</h2>
-          <p className="text-gray-300 mb-6 max-w-2xl mx-auto">
-            We specialize in sourcing rare classic cars. Tell us what you're looking for and our experts will find it for you.
-          </p>
-          <button className="bg-amber-600 hover:bg-amber-700 text-white font-bold py-3 px-8 rounded-full transition duration-300">
-            Request a Custom Search
-          </button>
-        </div>
       </div>
-      
+
       {/* WhatsApp Button */}
-      <a 
-        href="https://wa.me/1234567890" 
-        target="_blank" 
+      <a
+        href="https://wa.me/+962787491703"
+        target="_blank"
         rel="noopener noreferrer"
-        className="fixed bottom-24 right-6 bg-green-600 text-white p-4 rounded-full shadow-lg hover:bg-green-700 transition duration-300 z-40"
+        className="fixed bottom-20 right-6 z-10 w-14 h-14 rounded-full bg-green-500 flex items-center justify-center shadow-lg hover:bg-green-600 transition-colors"
       >
-        <FaWhatsapp size={24} />
+        <svg className="h-8 w-8 text-white" fill="currentColor" viewBox="0 0 24 24" aria-hidden="true">
+          <path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413Z" />
+        </svg>
       </a>
-      
+
       {/* Back to Top Button */}
       {showBackToTop && (
-        <button 
+        <button
           onClick={scrollToTop}
-          className="fixed bottom-6 right-6 bg-gray-700 text-white p-4 rounded-full shadow-lg hover:bg-gray-600 transition duration-300 z-40"
+          className="fixed bottom-6 right-6 bg-gray-700 text-white p-4 rounded-full shadow-lg hover:bg-green-600 transition duration-300 z-40"
         >
           <FaArrowUp size={20} />
         </button>
       )}
-      
+
       {/* Chatbot Button */}
-      <button 
+      <button
         onClick={() => setShowChatbot(!showChatbot)}
-        className="fixed bottom-24 left-6 bg-amber-600 text-white p-4 rounded-full shadow-lg hover:bg-amber-700 transition duration-300 z-40"
+        className="fixed bottom-24 left-6 bg-green-600 text-white p-4 rounded-full shadow-lg hover:bg-green-700 transition duration-300 z-40"
       >
         {showChatbot ? <FaTimes size={24} /> : <FaComments size={24} />}
       </button>
-      
+
       {/* Chatbot Panel */}
       {showChatbot && (
         <div className="fixed bottom-40 left-6 w-80 bg-gray-800 rounded-lg shadow-xl overflow-hidden z-40 animate-slide-up">
-          <div className="bg-amber-600 p-4">
+          <div className="bg-green-600 p-4">
             <h3 className="font-bold">Classic Car Concierge</h3>
             <p className="text-sm text-amber-100">Ask us anything about our collection</p>
           </div>
-          
-          <div className="h-80 overflow-y-auto p-4" style={{scrollBehavior: 'smooth'}}>
+
+          <div className="h-80 overflow-y-auto p-4" style={{ scrollBehavior: 'smooth' }}>
             {chatHistory.map((chat, index) => (
-              <div 
+              <div
                 key={index}
                 className={`mb-3 ${chat.sender === 'user' ? 'text-right' : 'text-left'}`}
               >
-                <div 
-                  className={`inline-block p-3 rounded-lg ${
-                    chat.sender === 'user' 
-                      ? 'bg-amber-600 text-white rounded-br-none' 
+                <div
+                  className={`inline-block p-3 rounded-lg ${chat.sender === 'user'
+                      ? 'bg-green-600 text-white rounded-br-none'
                       : 'bg-gray-700 text-white rounded-bl-none'
-                  }`}
+                    }`}
                 >
                   {chat.message}
                 </div>
               </div>
             ))}
           </div>
-          
+
           <form onSubmit={handleChatSubmit} className="p-3 border-t border-gray-700 flex">
             <input
               type="text"
@@ -586,9 +446,9 @@ function Cars() {
               placeholder="Type your message..."
               className="flex-1 bg-gray-700 rounded-l p-2 outline-none"
             />
-            <button 
+            <button
               type="submit"
-              className="bg-amber-600 text-white px-4 rounded-r"
+              className="bg-green-600 text-white px-4 rounded-r"
             >
               Send
             </button>
@@ -599,4 +459,4 @@ function Cars() {
   );
 }
 
-export default Cars;  
+export default Cars;

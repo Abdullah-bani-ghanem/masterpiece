@@ -38,6 +38,30 @@ const userSchema = new mongoose.Schema({
     type: String,
     required: true,
   },
+  phoneNumber: {
+    type: String,
+  },
+  
+  address: {
+    type: String,
+  },
+  
+  bio: {
+    type: String,
+  },
+  
+  profilePicture: {
+    type: String,
+  },
+  
+  role: {
+    type: String,
+    enum: ["user", "admin"],
+    default: "user",
+  },
+  createdAt: {
+    type: Date, default: Date.now 
+  },
 });
 
 // قبل حفظ المستخدم في قاعدة البيانات، نقوم بتشفير كلمة المرور
