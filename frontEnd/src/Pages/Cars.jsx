@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { FaWhatsapp, FaArrowUp, FaSearch, FaFilter, FaComments, FaTimes } from 'react-icons/fa';
 import axios from 'axios';
+import { Link } from 'react-router-dom';
 
 function Cars() {
   const [showBackToTop, setShowBackToTop] = useState(false);
@@ -11,7 +12,7 @@ function Cars() {
   ]);
   const [filterOpen, setFilterOpen] = useState(false);
   const [filters, setFilters] = useState({
-    priceRange: [0, 50000],
+    priceRange: [0, 1000000], // Increased max price
     year: '',
     make: '',
     model: '',
@@ -23,12 +24,13 @@ function Cars() {
 
   const [cars, setCars] = useState([]);
   const [loading, setLoading] = useState(true);
-  
+
   useEffect(() => {
     // Fetch data from API
     const fetchCars = async () => {
       try {
         const response = await axios.get('http://localhost:5000/api/cars/approved-cars/1');
+        // console.log(response.data);  // تحقق من استجابة الخادم
         setCars(response.data);
         setSearchResults(response.data); // Initialize search results with all cars
         setLoading(false);
@@ -58,23 +60,24 @@ function Cars() {
   // Enhanced search effect - runs whenever searchQuery or filters change
   useEffect(() => {
     if (cars.length === 0) return; // Skip if no data loaded yet
-    
+
     setIsSearching(true);
-    
+
     // Debounce search for better performance
     const searchTimeout = setTimeout(() => {
       const filteredResults = performSearch(cars, searchQuery, filters);
+
       setSearchResults(filteredResults);
       setIsSearching(false);
     }, 300);
-    
+
     return () => clearTimeout(searchTimeout);
   }, [searchQuery, filters, cars]);
-  
+
   // Enhanced search function that searches all car properties
   const performSearch = (carsArray, query, filterSettings) => {
     const searchLower = query.toLowerCase().trim();
-    
+
     return carsArray.filter(car => {
       // Check filters first
       const priceNum = parseInt(car.price);
@@ -85,12 +88,12 @@ function Cars() {
         (filterSettings.make === '' || car.make.toLowerCase().includes(filterSettings.make.toLowerCase())) &&
         (filterSettings.model === '' || car.model.toLowerCase().includes(filterSettings.model.toLowerCase()))
       );
-      
+
       // If no search query, just return filter results
       if (searchLower === '') return matchesFilters;
-      
+
       // Enhanced search across all car properties
-      const matchesSearch = 
+      const matchesSearch =
         car.make?.toLowerCase().includes(searchLower) ||
         car.model?.toLowerCase().includes(searchLower) ||
         car.year?.toString().includes(searchLower) ||
@@ -101,7 +104,7 @@ function Cars() {
         car.engine?.toLowerCase().includes(searchLower) ||
         car.transmission?.toLowerCase().includes(searchLower) ||
         car.price?.toString().includes(searchLower);
-        
+
       return matchesFilters && matchesSearch;
     });
   };
@@ -153,7 +156,7 @@ function Cars() {
     e.preventDefault();
     // Search is already handled by the useEffect
   };
-  
+
   // Handle filter changes
   const handleFilterChange = (filterName, value) => {
     setFilters(prev => ({
@@ -161,7 +164,7 @@ function Cars() {
       [filterName]: value
     }));
   };
-  
+
   // Toggle filter panel
   const toggleFilterPanel = () => {
     setFilterOpen(!filterOpen);
@@ -196,7 +199,7 @@ function Cars() {
 
           {/* Filter Toggle Button */}
           <div className="font-[cursive] flex justify-center mt-4">
-            <button 
+            <button
               onClick={toggleFilterPanel}
               className="flex items-center space-x-2 text-green-400 hover:text-green-300 transition-colors"
             >
@@ -209,17 +212,17 @@ function Cars() {
           {filterOpen && (
             <div className="mt-6 p-6 bg-gray-800 rounded-lg border border-gray-700 max-w-2xl mx-auto">
               <h3 className="font-[cursive] text-lg font-semibold mb-4 text-green-400">Refine Your Search</h3>
-              
+
               <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                 <div>
                   <label className="font-[cursive] block text-sm font-medium text-gray-300 mb-1">Price Range</label>
                   <div className="flex items-center space-x-2">
                     <input
                       type="number"
-                      placeholder="Min"
+                      placeholder="Max"
                       className="w-full p-2 rounded bg-gray-700 border border-gray-600"
-                      value={filters.priceRange[0]}
-                      onChange={(e) => handleFilterChange('priceRange', [parseInt(e.target.value) || 0, filters.priceRange[1]])}
+                      value={filters.priceRange[1]}
+                      onChange={(e) => handleFilterChange('priceRange', [filters.priceRange[0], parseInt(e.target.value) || 1000000])}
                     />
                     <span>to</span>
                     <input
@@ -231,7 +234,7 @@ function Cars() {
                     />
                   </div>
                 </div>
-                
+
                 <div>
                   <label className="font-[cursive] block text-sm font-medium text-gray-300 mb-1">Year</label>
                   <input
@@ -242,7 +245,7 @@ function Cars() {
                     onChange={(e) => handleFilterChange('year', e.target.value)}
                   />
                 </div>
-                
+
                 <div>
                   <label className="font-[cursive] block text-sm font-medium text-gray-300 mb-1">Make</label>
                   <input
@@ -253,7 +256,7 @@ function Cars() {
                     onChange={(e) => handleFilterChange('make', e.target.value)}
                   />
                 </div>
-                
+
                 <div>
                   <label className="font-[cursive] block text-sm font-medium text-gray-300 mb-1">Model</label>
                   <input
@@ -265,7 +268,7 @@ function Cars() {
                   />
                 </div>
               </div>
-              
+
               <div className="mt-4 flex justify-end">
                 <button
                   onClick={() => setFilters({
@@ -310,8 +313,8 @@ function Cars() {
             {/* Search results count */}
             {!loading && (
               <p className="font-[cursive] text-center text-gray-300 mt-2">
-                {searchResults.length === 0 ? 
-                  "No cars match your search" : 
+                {searchResults.length === 0 ?
+                  "No cars match your search" :
                   `Showing ${searchResults.length} ${searchResults.length === 1 ? 'car' : 'cars'}`
                 }
                 {searchQuery && ` for "${searchQuery}"`}
@@ -343,12 +346,13 @@ function Cars() {
         ) : (
           /* Cars Grid with Improved Card Design */
           <div className="font-[cursive] grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-10">
-            {searchResults.map(car => (
-              <div key={car.id} className="bg-gray-800 rounded-lg overflow-hidden transition-all duration-300 hover:scale-105 hover:shadow-xl shadow-lg border border-gray-700 group">
+            {searchResults.map((car,index) => (
+
+              <div key={index} className="bg-gray-800 rounded-lg overflow-hidden transition-all duration-300 hover:scale-105 hover:shadow-xl shadow-lg border border-gray-700 group">
                 <div className="relative">
-                  <img 
+                  <img
                     src={`http://localhost:5000/uploads/${car.images[0]}`}
-                    alt={car.name} 
+                    alt={car.name}
                     className="w-full h-56 object-cover transition-transform duration-500 group-hover:scale-110"
                   />
                   <div className="absolute top-0 right-0 bg-green-600 text-white px-4 py-2 rounded-bl-lg font-bold text-lg shadow-md">
@@ -363,17 +367,19 @@ function Cars() {
                     <span className="bg-gray-700 text-gray-300 px-3 py-1 rounded-full text-sm">Year: {car.year}</span>
                     <span className="bg-gray-700 text-gray-300 px-3 py-1 rounded-full text-sm">{car.model}</span>
                   </div>
-                  
+
                   <p className="text-gray-300 mb-4 line-clamp-2">{car.description}</p>
-                  
+
                   <div className="mt-4 flex justify-between items-center">
                     <div className="flex items-center space-x-2">
                       <div className="h-3 w-3 rounded-full bg-green-500"></div>
                       <span className="text-sm text-gray-400">Available</span>
                     </div>
-                    <button className="bg-green-600 hover:bg-green-700 text-white py-2 px-4 rounded-lg transition-colors duration-300 font-medium">
-                      View Details
-                    </button>
+                    <Link to={`/car-details/${car._id}`}>
+                      <button className="bg-green-600 hover:bg-green-700 text-white py-2 px-4 rounded-lg transition-colors duration-300 font-medium">
+                        View Details
+                      </button>
+                    </Link>
                   </div>
                 </div>
               </div>
@@ -428,8 +434,8 @@ function Cars() {
               >
                 <div
                   className={`inline-block p-3 rounded-lg ${chat.sender === 'user'
-                      ? 'bg-green-600 text-white rounded-br-none'
-                      : 'bg-gray-700 text-white rounded-bl-none'
+                    ? 'bg-green-600 text-white rounded-br-none'
+                    : 'bg-gray-700 text-white rounded-bl-none'
                     }`}
                 >
                   {chat.message}

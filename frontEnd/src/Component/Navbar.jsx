@@ -14,7 +14,7 @@ function Navbar() {
   const [userRole, setUserRole] = useState('');
 
 
- //منع اليوزر من الداش بورد
+  //منع اليوزر من الداش بورد
   useEffect(() => {
     const fetchUser = async () => {
       try {
@@ -30,7 +30,7 @@ function Navbar() {
         setIsAuthenticated(false);
       }
     };
-  
+
     fetchUser();
   }, []);
 
@@ -129,34 +129,7 @@ function Navbar() {
 
 
 
-        {/* User Greeting (when authenticated) */}
-        {isAuthenticated && userName && (
-          <div className="hidden md:flex items-center">
-            <div className="flex items-center space-x-3">
 
-              {/* رابط حول صورة البروفايل */}
-              <a href="/userprofile">
-                {userProfilePicture ? (
-                  // ✅ إذا وُجدت صورة شخصية، نعرضها
-                  <img
-                    src={userProfilePicture}
-                    alt={userName}
-                    className="w-8 h-8 rounded-full object-cover border border-gray-400 hover:opacity-80 transition"
-                  />
-                ) : (
-                  // ❌ إذا ما فيه صورة، نعرض أول حرف من الاسم
-                  <div className="w-8 h-8 rounded-full bg-green-600 flex items-center justify-center text-white font-semibold hover:opacity-80 transition">
-                    {userName.charAt(0).toUpperCase()}
-                  </div>
-                )}
-              </a>
-
-              <span className="font-[cursive] text-gray-700 dark:text-gray-300">
-                Hello, <span className="font-[cursive]">{userName}</span>
-              </span>
-            </div>
-          </div>
-        )}
 
 
 
@@ -229,6 +202,10 @@ function Navbar() {
           id="navbar-language"
         >
           <ul className="flex flex-col font-medium p-4 md:p-0 mt-4 border border-gray-100 rounded-lg bg-gray-50 md:space-x-8 rtl:space-x-reverse md:flex-row md:mt-0 md:border-0 md:bg-white dark:bg-gray-800 md:dark:bg-gray-900 dark:border-gray-700">
+
+
+
+            
             <li>
               <Link
                 to="/"
@@ -238,6 +215,11 @@ function Navbar() {
                 Home
               </Link>
             </li>
+
+
+
+
+
             <li>
               <Link
                 to="/cars"
@@ -246,31 +228,22 @@ function Navbar() {
                 Cars
               </Link>
             </li>
-            <li>
-              <Link
-                to="/about"
-                className="font-[cursive] block py-2 px-3 text-2xl md:p-0 text-gray-900 rounded-lg hover:bg-gray-100 md:hover:bg-transparent md:hover:text-green-600 dark:text-white md:dark:hover:text-green-500 dark:hover:bg-gray-700 dark:hover:text-white md:dark:hover:bg-transparent dark:border-gray-700 transition-colors duration-300"
-              >
-                About
-              </Link>
-            </li>
-            <li>
-              <Link
-                to="/contact"
-                className="font-[cursive] block py-2 px-3 text-2xl md:p-0 text-gray-900 rounded-lg hover:bg-gray-100 md:hover:bg-transparent md:hover:text-green-600 dark:text-white md:dark:hover:text-green-500 dark:hover:bg-gray-700 dark:hover:text-white md:dark:hover:bg-transparent dark:border-gray-700 transition-colors duration-300"
-              >
-                Contact
-              </Link>
-            </li>
+            
 
-            <li>
+
+            {/* <li>
               <Link
                 to="/userProfile"
                 className="font-[cursive] block py-2 px-3 text-2xl md:p-0 text-gray-900 rounded-lg hover:bg-gray-100 md:hover:bg-transparent md:hover:text-green-600 dark:text-white md:dark:hover:text-green-500 dark:hover:bg-gray-700 dark:hover:text-white md:dark:hover:bg-transparent dark:border-gray-700 transition-colors duration-300"
               >
                 UserProfile
               </Link>
-            </li>
+            </li> */}
+
+
+
+
+
             <li>
               <Link
                 to="/payment"
@@ -279,6 +252,12 @@ function Navbar() {
                 payment
               </Link>
             </li>
+
+
+
+
+
+
             <li>
               <Link
                 to="/form"
@@ -286,8 +265,13 @@ function Navbar() {
               >
                 form
               </Link>
-            
+
             </li>
+
+
+
+
+
             {userRole === 'admin' && (
               <li>
                 <Link
@@ -301,7 +285,66 @@ function Navbar() {
 
 
 
+
+            <li>
+              <Link
+                to="/contact"
+                className="font-[cursive] block py-2 px-3 text-2xl md:p-0 text-gray-900 rounded-lg hover:bg-gray-100 md:hover:bg-transparent md:hover:text-green-600 dark:text-white md:dark:hover:text-green-500 dark:hover:bg-gray-700 dark:hover:text-white md:dark:hover:bg-transparent dark:border-gray-700 transition-colors duration-300"
+              >
+                Contact
+              </Link>
+            </li>
+
+
+
+
+
+            <li>
+              <Link
+                to="/about"
+                className="font-[cursive] block py-2 px-3 text-2xl md:p-0 text-gray-900 rounded-lg hover:bg-gray-100 md:hover:bg-transparent md:hover:text-green-600 dark:text-white md:dark:hover:text-green-500 dark:hover:bg-gray-700 dark:hover:text-white md:dark:hover:bg-transparent dark:border-gray-700 transition-colors duration-300"
+              >
+                About
+              </Link>
+            </li>
+
+
+
           </ul>
+
+
+          {/* User Greeting (when authenticated) */}
+          {isAuthenticated && userName && (
+            <div className="hidden md:flex items-center ml-10">
+              <div className="flex items-center space-x-3">
+
+                {/* رابط حول صورة البروفايل */}
+                <span className="font-[cursive] text-gray-700 dark:text-gray-300">
+                  Hello, <span className="font-[cursive]">{userName}</span>
+                </span>
+                <a href="/userprofile">
+                  {userProfilePicture ? (
+                    // ✅ إذا وُجدت صورة شخصية، نعرضها
+                    <img
+                      src={userProfilePicture}
+                      alt={userName}
+                      className="w-8 h-8 rounded-full object-cover border border-gray-400 hover:opacity-80 transition"
+                    />
+                  ) : (
+                    // ❌ إذا ما فيه صورة، نعرض أول حرف من الاسم
+                    <div className="w-8 h-8 rounded-full bg-green-600 flex items-center justify-center text-white font-semibold hover:opacity-80 transition">
+                      {userName.charAt(0).toUpperCase()}
+                    </div>
+                  )}
+                </a>
+
+              </div>
+            </div>
+          )}
+
+
+
+
         </div>
       </div>
     </nav>

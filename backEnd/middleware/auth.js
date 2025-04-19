@@ -63,8 +63,37 @@
 
 
 
+// const jwt = require("jsonwebtoken");
+// const User = require("../models/User");
+
+// const protect = async (req, res, next) => {
+//   try {
+//     const token = req.headers.authorization?.split(" ")[1];
+//     if (!token) return res.status(401).json({ message: "Unauthorized" });
+
+//     const decoded = jwt.verify(token, process.env.JWT_SECRET);
+//     req.user = await User.findById(decoded.id).select("-password");
+//     next();
+//   } catch (error) {
+//     res.status(401).json({ message: "Token failed" });
+//   }
+// };
+
+// const isAdmin = (req, res, next) => {
+//   if (req.user && req.user.role === "admin") {
+//     next();
+//   } else {
+//     res.status(403).json({ message: "Access denied. Admins only." });
+//   }
+// };
+
+// module.exports = { protect, isAdmin };
+
+
+
 const jwt = require("jsonwebtoken");
 const User = require("../models/User");
+const Comment = require('../models/Comment');
 
 const protect = async (req, res, next) => {
   try {
@@ -79,6 +108,7 @@ const protect = async (req, res, next) => {
   }
 };
 
+// هذا الـ middleware يتحقق من أن المستخدم لديه صلاحيات admin فقط
 const isAdmin = (req, res, next) => {
   if (req.user && req.user.role === "admin") {
     next();
@@ -87,4 +117,38 @@ const isAdmin = (req, res, next) => {
   }
 };
 
-module.exports = { protect, isAdmin };
+// التحقق من أن المستخدم الذي أضاف التعليق هو نفسه المستخدم الذي قام بالتعليق
+// const isCommentOwner = (req, res, next) => {
+//   const commentOwnerId = req.body.userId; // أو استخرج id من قاعدة البيانات بناءً على الـ comment
+//   if (req.user.id === commentOwnerId) {
+//     next();
+//   } else {
+//     res.status(403).json({ message: "You are not authorized to delete or modify this comment" });
+//   }
+// };
+
+
+const isCommentOwner = async (req, res, next) => {
+  try {
+    const comment = await Comment.findById(req.params.commentId); // أو استخدم `req.body.commentId` إذا كان موجودًا في الجسم
+
+    if (!comment) {
+      return res.status(404).json({ message: "Comment not found." });
+    }
+
+    // التحقق من أن المستخدم هو الذي أضاف التعليق
+    if (req.user.id === comment.userId.toString()) {
+      next();
+    } else {
+      res.status(403).json({ message: "You are not authorized to delete or modify this comment" });
+    }
+  } catch (err) {
+    console.error(err);
+    res.status(500).json({ message: "Failed to verify comment ownership." });
+  }
+};
+
+
+module.exports = { protect, isAdmin, isCommentOwner };
+
+

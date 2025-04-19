@@ -1,5 +1,3 @@
-
-
 const express = require("express");
 const router = express.Router();
 const carController = require("../controllers/carController");
@@ -17,6 +15,8 @@ router.post("/submit", protect, upload.array("images", 5), carController.submitC
 
 // مستخدم عادي يضيف سيارة
 router.post("/add", protect, carController.addCar);
+
+router.post("/addByAdmin", protect,isAdmin, carController.addCarByAdmin);
 
 
 
@@ -48,6 +48,21 @@ router.get("/all", protect, isAdmin, carController.getAllCarsForAdmin);
 router.get("/:id", protect, carController.getCarById);
 
 router.get('/approved-cars/:id', carController.getApprovedCars);////
+
+router.delete('/:id', carController.deleteCar);////
+
+
+
+// // مسار لإضافة تعليق
+// router.post('/:carId/comments', carController.addComment);
+
+// // مسار لاسترجاع التعليقات
+// router.get('/:carId/comments', carController.getComments);
+
+
+
+
+
 
 module.exports = router;
 

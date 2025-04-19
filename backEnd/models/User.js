@@ -29,6 +29,11 @@ const userSchema = new mongoose.Schema({
     type: String,
     required: true,
   },
+  username: {
+    type: String,
+    required: true,  // تأكد من أن `username` موجود ومطلوب
+    unique: true
+  },
   email: {
     type: String,
     required: true,
@@ -40,6 +45,7 @@ const userSchema = new mongoose.Schema({
   },
   phoneNumber: {
     type: String,
+    required: true,
   },
   
   address: {

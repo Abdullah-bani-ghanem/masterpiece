@@ -25,7 +25,7 @@ exports.register = async (req, res) => {
     );
 
     res.cookie("token", token, {
-      httpOnly: true,
+      httpOnly: false,
       secure: false,
       sameSite: "lax",
       maxAge: 3600000,
@@ -63,7 +63,7 @@ exports.login = async (req, res) => {
     );
 
     res.cookie("token", token, {
-      httpOnly: true,
+      httpOnly: false,
       secure: false,
       sameSite: "lax",
       maxAge: 3600000,
@@ -200,9 +200,9 @@ exports.deleteUser = async (req, res) => {
 //اضافه مستخدم جديد
 exports.createUser = async (req, res) => {
   try {
-    const { name, email, password, role } = req.body;
+    const { name, email, phoneNumber, password, role } = req.body;
 
-    if (!name || !email || !password) {
+    if (!name || !email || !phoneNumber || !password) {
       return res.status(400).json({ message: "الاسم، الإيميل، وكلمة السر مطلوبة" });
     }
 
@@ -216,6 +216,7 @@ exports.createUser = async (req, res) => {
     const user = new User({
       name,
       email,
+      phoneNumber,
       password: hashedPassword,
       role: role || "user",
     });
@@ -252,11 +253,11 @@ exports.getUserById = async (req, res) => {
 //تعديل بيانات مستخدم
 exports.updateUser = async (req, res) => {
   try {
-    const { name, email, role } = req.body;
+    const { name, email, phoneNumber, role } = req.body;
 
     const updatedUser = await User.findByIdAndUpdate(
       req.params.id,
-      { name, email, role },
+      { name, email, phoneNumber, role },
       { new: true, runValidators: true }
     );
 

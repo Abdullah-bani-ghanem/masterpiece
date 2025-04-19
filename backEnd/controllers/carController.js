@@ -4,6 +4,57 @@
 const Car = require("../models/Car");
 
 // 1. إضافة سيارة جديدة من قبل المستخدم
+// exports.addCar = async (req, res) => {
+//   try {
+//     // استخراج البيانات من الجسم (request body)
+//     const { 
+//       name, 
+//       brand, 
+//       model, 
+//       year, 
+//       price, 
+//       condition, 
+//       images, 
+//       description,
+//       userEmail,   // البريد الإلكتروني للمستخدم
+//       userPhone,   // رقم الهاتف للمستخدم
+//       userName     // اسم المستخدم
+//     } = req.body;
+
+//     // تحقق من وجود جميع البيانات المطلوبة
+//     if (!name || !brand || !model || !year || !price || !condition) {
+//       return res.status(400).json({ message: "جميع الحقول المطلوبة يجب أن تكون مملوءة" });
+//     }
+
+//     // إنشاء السيارة الجديدة
+//     const newCar = new Car({
+//       name,
+//       brand,
+//       model,
+//       year,
+//       price,
+//       condition,
+//       images,
+//       description,
+//       userEmail,  // إضافة البريد الإلكتروني للمستخدم
+//       userPhone,  // إضافة رقم الهاتف للمستخدم
+//       userName,   // إضافة اسم المستخدم
+//       seller: req.user._id, // تأكد أن الـ middleware يضيف req.user
+//     });
+
+//     // حفظ السيارة في قاعدة البيانات
+//     await newCar.save();
+
+//     // إرسال استجابة ناجحة
+//     res.status(201).json({ message: "تم إرسال السيارة للمراجعة", car: newCar });
+
+//   } catch (err) {
+//     // التعامل مع الأخطاء
+//     res.status(500).json({ message: "فشل الإرسال", error: err.message });
+//   }
+// };
+
+
 exports.addCar = async (req, res) => {
   try {
     const { name, brand, model, year, price, condition, images, description } = req.body;
@@ -27,6 +78,40 @@ exports.addCar = async (req, res) => {
   }
 };
 
+
+
+
+
+
+exports.addCarByAdmin = async (req, res) => {
+  try {
+    const { name, brand, model, year, price, description } = req.body;
+    if (!name || !brand || !model || !year || !price || !description) {
+      return res.status(400).json({ message: "كل الحقول مطلوبة!" });
+    }
+
+    // إذا كانت الصور موجودة
+    const images = req.files ? req.files.map(file => file.filename) : [];
+
+    // إنشاء السيارة في قاعدة البيانات
+    const newCar = new Car({
+      name,
+      brand,
+      model,
+      year,
+      price,
+      images,
+      description,
+      seller: req.user._id,  // تأكد من أنك تضيف الـ user بشكل صحيح
+    });
+
+    await newCar.save();
+    res.status(201).json({ message: "تم إرسال السيارة", car: newCar });
+  } catch (err) {
+    console.error("Error in adding car:", err);  // إضافة تسجيل الأخطاء
+    res.status(500).json({ message: "فشل الإرسال", error: err.message });
+  }
+};
 
 
 
@@ -213,3 +298,74 @@ exports.getApprovedCars = async (req, res) => {
       res.status(500).json({ message: "Server error", error: error.message });
     }
   };
+
+
+
+
+  // Delete Car Controller
+  exports.deleteCar = async (req, res) => {
+  const { id } = req.params; // الحصول على id من باراميتر الـ URL
+
+  try {
+      // البحث عن السيارة بناءً على id وحذفها
+      const car = await Car.findByIdAndDelete(id);
+
+      // إذا كانت السيارة غير موجودة، يرجع رسالة خطأ 404
+      if (!car) {
+          return res.status(404).json({ message: 'Car not found' });
+      }
+
+      // إذا تم الحذف بنجاح، يرجع رسالة تأكيد
+      res.status(200).json({ message: 'Car deleted successfully' });
+  } catch (err) {
+      // إذا حدث خطأ في العملية، يرجع رسالة خطأ 500
+      res.status(500).json({ message: 'Failed to delete car', error: err.message });
+  }
+};
+
+
+
+
+
+
+
+// إضافة تعليق
+// exports.addComment = async (req, res) => {
+//   const { carId } = req.params;
+//   const { comment } = req.body;
+//   const userId = req.user._id;  // assuming you have a user authenticated with JWT token
+
+//   try {
+//     const car = await Car.findById(carId);
+//     if (!car) {
+//       return res.status(404).json({ message: "Car not found" });
+//     }
+
+//     // إضافة تعليق إلى السيارة
+//     car.comments.push({ user: userId, comment });
+//     await car.save();
+
+//     res.status(200).json({ message: "Comment added successfully" });
+//   } catch (error) {
+//     res.status(500).json({ message: "Server error", error: error.message });
+//   }
+// };
+
+
+
+
+// // الحصول على جميع التعليقات الخاصة بالسيارة
+// exports.getComments = async (req, res) => {
+//   const { carId } = req.params;
+
+//   try {
+//     const car = await Car.findById(carId).populate('comments.user', 'name'); // Populate user details
+//     if (!car) {
+//       return res.status(404).json({ message: "Car not found" });
+//     }
+
+//     res.status(200).json(car.comments); // إرجاع التعليقات فقط
+//   } catch (error) {
+//     res.status(500).json({ message: "Server error", error: error.message });
+//   }
+// };
