@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { FaUserCircle, FaEnvelope, FaPhone, FaMapMarkerAlt, FaCalendarAlt, FaPencilAlt, FaSignOutAlt } from 'react-icons/fa';
+// import { MdVerified } from 'react-icons/md'; // بديل لـ FaBadgeCheck
 import axios from 'axios';
 import { useNavigate } from 'react-router-dom';
 import Swal from 'sweetalert2';
@@ -167,15 +168,18 @@ const UserProfile = () => {
 
   if (loading) {
     return (
-      <div className="flex justify-center items-center h-screen bg-gray-900 dark:bg-gray-800 text-white">
-        <div className="text-2xl text-green-400">Loading data...</div>
+      <div className="flex justify-center items-center h-screen bg-gray-900 text-white">
+        <div className="text-center">
+          <div className="animate-spin rounded-full h-16 w-16 border-t-2 border-b-2 border-green-500 mx-auto mb-4"></div>
+          <div className="text-2xl text-green-400">Loading profile data...</div>
+        </div>
       </div>
     );
   }
 
   if (error) {
     return (
-      <div className="flex flex-col justify-center items-center h-screen bg-gray-900 dark:bg-gray-800 text-white">
+      <div className="flex flex-col justify-center items-center h-screen bg-gray-900 text-white">
         <div className="text-xl text-red-400 mb-4">{error}</div>
         <button
           onClick={() => navigate('/login')}
@@ -188,51 +192,81 @@ const UserProfile = () => {
   }
 
   return (
-    <div className="min-h-screen bg-gray-900 dark:bg-gray-800 text-white">
-      {/* Hero Section */}
-      <div className="bg-gray-700 bg-opacity-70 bg-blend-overlay bg-center bg-cover py-10" 
+    <div className="min-h-screen bg-gray-900 text-white pb-16">
+      {/* Hero Section with username prominently displayed */}
+      <div className="bg-gradient-to-r from-gray-800 to-gray-900 bg-opacity-90 bg-blend-overlay bg-center bg-cover py-14" 
           style={{ backgroundImage: 'url("https://media.istockphoto.com/id/643897728/photo/woman-using-her-laptop.jpg?s=612x612&w=0&k=20&c=TzNngBCujgdkhwZQ6cctEVyjOAAudJLBytR8M-UHsh4=")' }}>
         <div className="container mx-auto px-4 text-center text-white">
-          <h1 className="font-[cursive] text-5xl md:text-6xl font-bold mb-6 drop-shadow-lg">User Profile</h1>
-          <p className="font-[cursive] text-xl md:text-2xl max-w-3xl mx-auto">
-            "Welcome to your profile page – here you can view and update your personal information, including your name, profile picture, and account settings."
+          <h2 className="font-sans text-2xl md:text-3xl font-medium mb-2 text-green-400">Welcome back</h2>
+          <h1 className="font-sans text-5xl md:text-6xl font-bold mb-6 drop-shadow-lg">
+            {userData?.name || 'User Profile'}
+            {userData?.verified && (
+              <span className="inline-block ml-3 text-green-400">
+                <FaBadgeCheck className="inline-block" />
+              </span>
+            )}
+          </h1>
+          <p className="font-sans text-xl md:text-2xl max-w-3xl mx-auto text-gray-300">
+            Manage your personal information and account settings
           </p>
         </div>
       </div>
 
-      <div className="max-w-4xl mx-auto bg-gray-800 dark:bg-gray-700 rounded-lg shadow-xl overflow-hidden border border-gray-700 mt-10">
-        {/* Header */}
-        <div className="bg-gradient-to-r from-green-600 to-teal-700 h-48 flex items-center justify-center relative">
+      <div className="max-w-4xl mx-auto bg-gray-800 rounded-lg shadow-2xl overflow-hidden border border-gray-700 mt-10 transform transition-all duration-300 hover:shadow-green-900/30">
+        {/* Header with larger profile image and username */}
+        <div className="relative">
+          {/* Background gradient */}
+          <div className="bg-gradient-to-r from-green-700 to-teal-700 h-48"></div>
+          
+          {/* Profile image - moved down to overlap the gradient section */}
+          <div className="absolute left-10 transform -translate-y-1/2">
+            <div className="relative group">
+              {getProfileImageSource() ? (
+                <img
+                  src={getProfileImageSource()}
+                  alt={userData.name}
+                  className="w-36 h-36 rounded-full border-4 border-white shadow-xl object-cover group-hover:border-green-400 transition-all duration-300"
+                />
+              ) : (
+                <div className="w-36 h-36 rounded-full bg-gray-700 flex items-center justify-center border-4 border-white shadow-xl group-hover:border-green-400 transition-all duration-300">
+                  <FaUserCircle className="w-24 h-24 text-white" />
+                </div>
+              )}
+              
+              {/* Edit overlay that appears on hover when in view mode */}
+              {!isEditing && (
+                <div 
+                  onClick={() => setIsEditing(true)}
+                  className="absolute inset-0 bg-black bg-opacity-50 rounded-full flex items-center justify-center opacity-0 group-hover:opacity-100 cursor-pointer transition-all duration-300"
+                >
+                  <FaPencilAlt className="text-white text-xl" />
+                </div>
+              )}
+            </div>
+          </div>
+          
+          {/* Logout button */}
           <div className="absolute right-6 top-6">
             <button
               onClick={handleLogout}
-              className="flex items-center text-white bg-gray-800 bg-opacity-60 px-4 py-2 rounded-lg hover:bg-opacity-80 transition duration-300"
+              className="flex items-center text-white bg-gray-800 bg-opacity-70 px-4 py-2 rounded-lg hover:bg-red-700 transition duration-300"
             >
               <FaSignOutAlt className="mr-2" />
               <span>Logout</span>
             </button>
           </div>
-          <div className="relative">
-            {getProfileImageSource() ? (
-              <img
-                src={getProfileImageSource()}
-                alt={userData.name}
-                className="w-32 h-32 rounded-full border-4 border-white shadow-xl object-cover"
-              />
-            ) : (
-              <div className="w-32 h-32 rounded-full bg-gray-800 flex items-center justify-center border-4 border-white shadow-xl">
-                <FaUserCircle className="w-24 h-24 text-white" />
-              </div>
-            )}
-          </div>
         </div>
         
-        {/* User Data */}
-        <div className="relative px-6 pb-8">
+        {/* User Data section with username prominently displayed */}
+        <div className="relative px-6 pb-8 pt-20">
           <div className="flex justify-between items-center mb-6">
-            <h1 className="text-3xl font-bold text-white pt-6">
-              {userData?.name || 'User Name'}
-            </h1>
+            <div>
+              <h1 className="text-3xl font-bold text-white">
+                {userData?.name || 'User Name'}
+              </h1>
+              <p className="text-green-400">@{userData?.username || userData?.name?.toLowerCase().replace(/\s+/g, '') || 'username'}</p>
+            </div>
+            
             <button 
               onClick={() => setIsEditing(!isEditing)}
               className="flex items-center bg-green-600 text-white px-4 py-2 rounded-md hover:bg-green-700 transition duration-300"
@@ -245,8 +279,8 @@ const UserProfile = () => {
           {isEditing ? (
             <form onSubmit={handleProfileUpdate} className="space-y-6">
               <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-                <div>
-                  <label className="block text-gray-200 font-medium mb-2">Name</label>
+                <div className="col-span-2 md:col-span-1">
+                  <label className="block text-gray-200 font-medium mb-2">Full Name</label>
                   <input
                     type="text"
                     name="name"
@@ -256,7 +290,7 @@ const UserProfile = () => {
                     required
                   />
                 </div>
-                <div>
+                <div className="col-span-2 md:col-span-1">
                   <label className="block text-gray-200 font-medium mb-2">Email</label>
                   <input
                     type="email"
@@ -267,7 +301,7 @@ const UserProfile = () => {
                     required
                   />
                 </div>
-                <div>
+                <div className="col-span-2 md:col-span-1">
                   <label className="block text-gray-200 font-medium mb-2">Phone Number</label>
                   <input
                     type="text"
@@ -277,7 +311,7 @@ const UserProfile = () => {
                     className="w-full px-4 py-3 border border-gray-600 rounded-md bg-gray-700 text-white focus:outline-none focus:ring-2 focus:ring-green-500"
                   />
                 </div>
-                <div>
+                <div className="col-span-2 md:col-span-1">
                   <label className="block text-gray-200 font-medium mb-2">Address</label>
                   <input
                     type="text"
@@ -296,6 +330,7 @@ const UserProfile = () => {
                   onChange={handleInputChange}
                   rows="4"
                   className="w-full px-4 py-3 border border-gray-600 rounded-md bg-gray-700 text-white focus:outline-none focus:ring-2 focus:ring-green-500"
+                  placeholder="Tell us about yourself..."
                 ></textarea>
               </div>
               <div>
@@ -331,7 +366,7 @@ const UserProfile = () => {
               <div className="flex justify-end">
                 <button
                   type="submit"
-                  className="px-6 py-3 bg-green-600 text-white rounded-md hover:bg-green-700 transition duration-300"
+                  className="px-6 py-3 bg-green-600 text-white rounded-md hover:bg-green-700 transition duration-300 shadow-lg hover:shadow-green-600/50"
                 >
                   Save Changes
                 </button>
@@ -339,6 +374,15 @@ const UserProfile = () => {
             </form>
           ) : (
             <div className="space-y-4">
+              {/* Username Display Card */}
+              <div className="p-6 mb-6 bg-gradient-to-r from-gray-700 to-gray-800 rounded-lg border-l-4 border-green-500 shadow-lg">
+                <h3 className="text-sm text-green-400 uppercase font-semibold mb-1">Username</h3>
+                <div className="flex items-center">
+                  <FaUserCircle className="text-green-400 text-xl mr-3" />
+                  <p className="text-white text-lg font-medium">{userData?.username || userData?.name?.toLowerCase().replace(/\s+/g, '') || 'username'}</p>
+                </div>
+              </div>
+              
               <div className="flex items-center p-4 border-b border-gray-600 hover:bg-gray-700 rounded-md transition duration-200">
                 <FaEnvelope className="text-green-400 text-xl mr-4" />
                 <div>
@@ -369,16 +413,25 @@ const UserProfile = () => {
                   <h3 className="text-sm text-gray-400">Join Date</h3>
                   <p className="text-white">
                     {userData?.createdAt 
-                      ? new Date(userData.createdAt).toLocaleDateString('en-US') 
+                      ? new Date(userData.createdAt).toLocaleDateString('en-US', {
+                          year: 'numeric',
+                          month: 'long',
+                          day: 'numeric'
+                        })
                       : 'Unknown'}
                   </p>
                 </div>
               </div>
               
-              {userData?.bio && (
-                <div className="p-4 mt-4 bg-gray-700 rounded-md border-l-4 border-green-500">
-                  <h3 className="text-lg font-medium text-green-400 mb-2">Bio</h3>
-                  <p className="text-gray-100">{userData.bio}</p>
+              {userData?.bio ? (
+                <div className="p-5 mt-6 bg-gray-700 rounded-lg border-l-4 border-green-500 shadow-md">
+                  <h3 className="text-lg font-medium text-green-400 mb-2">About Me</h3>
+                  <p className="text-gray-100 leading-relaxed">{userData.bio}</p>
+                </div>
+              ) : (
+                <div className="p-5 mt-6 bg-gray-700 rounded-lg border-l-4 border-gray-500 shadow-md opacity-75">
+                  <h3 className="text-lg font-medium text-gray-400 mb-2">About Me</h3>
+                  <p className="text-gray-300">No bio information available. Click 'Edit Profile' to add your bio.</p>
                 </div>
               )}
             </div>

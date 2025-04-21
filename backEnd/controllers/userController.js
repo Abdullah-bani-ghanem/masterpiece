@@ -268,3 +268,24 @@ exports.updateUser = async (req, res) => {
     res.status(500).json({ message: "❌ فشل في التحديث", error: error.message });
   }
 };
+
+
+
+
+
+
+
+
+// دالة لجلب عدد المستخدمين المسجلين
+exports.getUserCount = async (req, res) => {
+  try {
+    console.log("Fetching user count...");
+    const userCount = await User.countDocuments();  // عدد المستخدمين المسجلين
+
+    console.log("Fetched user count:", userCount);  // سجل النتيجة في الكونسول
+    res.json({ userCount });
+  } catch (err) {
+    console.error('Error fetching user count:', err);  // سجل الخطأ
+    res.status(500).json({ message: 'Failed to load user count.' });
+  }
+};

@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { motion } from 'framer-motion';
 import axios from "axios";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, Link } from "react-router-dom";
 import Swal from 'sweetalert2';
 
 const RegisterPage = () => {
@@ -39,7 +39,9 @@ const RegisterPage = () => {
         icon: 'warning',
         title: 'Password Mismatch',
         text: 'Passwords do not match!',
-        confirmButtonText: 'OK'
+        confirmButtonText: 'OK',
+        background: '#1F2937',
+        color: '#F9FAFB'
       });
       return;
     }
@@ -61,9 +63,11 @@ const RegisterPage = () => {
         icon: 'success',
         title: 'Registration Successful',
         text: 'You have registered successfully!',
-        confirmButtonText: 'OK'
+        confirmButtonText: 'OK',
+        background: '#1F2937',
+        color: '#F9FAFB'
       }).then(() => {
-        navigate("/login");
+        navigate("/");
       });
   
     } catch (error) {
@@ -71,99 +75,188 @@ const RegisterPage = () => {
         icon: 'error',
         title: 'Registration Failed',
         text: error.response?.data?.message || "An unexpected error occurred",
-        confirmButtonText: 'OK'
+        confirmButtonText: 'OK',
+        background: '#1F2937',
+        color: '#F9FAFB'
       });
     }
   };
 
-  // Animation variants
+  // Enhanced animation variants
   const containerVariants = {
     hidden: { opacity: 0 },
     visible: { 
       opacity: 1,
-      transition: { duration: 0.5, staggerChildren: 0.1 }
+      transition: { duration: 0.7, staggerChildren: 0.15 }
     }
   };
 
   const itemVariants = {
-    hidden: { y: 20, opacity: 0 },
-    visible: { y: 0, opacity: 1, transition: { duration: 0.5 } }
+    hidden: { y: 25, opacity: 0 },
+    visible: { y: 0, opacity: 1, transition: { duration: 0.6, ease: "easeOut" } }
+  };
+
+  const slideIn = {
+    hidden: { x: -70, opacity: 0 },
+    visible: { x: 0, opacity: 1, transition: { duration: 0.9, ease: "easeOut" } }
+  };
+
+  const pulse = {
+    scale: [1, 1.05, 1],
+    transition: { duration: 2, repeat: Infinity }
   };
 
   return (
-    <div className="min-h-screen bg-gray-100 flex items-center justify-center py-12 px-4 sm:px-6 lg:px-8">
-      <div className="max-w-4xl w-full flex bg-white rounded-xl shadow-lg overflow-hidden">
+    <div className="min-h-screen bg-gradient-to-b from-gray-900 to-gray-800 flex items-center justify-center py-12 px-4 sm:px-6 lg:px-8">
+      <motion.div 
+        initial={{ opacity: 0, scale: 0.95 }}
+        animate={{ opacity: 1, scale: 1 }}
+        transition={{ duration: 0.7 }}
+        className="max-w-5xl w-full flex bg-gray-900 rounded-2xl shadow-2xl overflow-hidden border border-gray-700"
+      >
         {/* Left side - Image with animation */}
         <motion.div 
-          className="hidden md:block md:w-1/2 bg-green-600 relative overflow-hidden"
-          initial={{ opacity: 0, x: -50 }}
-          animate={{ 
-            opacity: 1, 
-            x: 0,
-            transition: { duration: 0.8, delay: 0.3 }
-          }}
+          className="hidden md:block md:w-1/2 bg-gradient-to-br from-green-500 to-purple-900 relative overflow-hidden"
+          initial="hidden"
+          animate="visible"
+          variants={slideIn}
         >
-          {/* Animated circles in background */}
+          {/* Animated elements in background */}
           <motion.div 
-            className="absolute w-64 h-64 rounded-full bg-green-500 opacity-40" 
+            className="absolute w-64 h-64 rounded-full bg-purple-500 opacity-20" 
             style={{ top: '10%', left: '-20%' }}
             animate={{ 
-              scale: [1, 1.2, 1],
+              scale: [1, 1.4, 1],
+              x: [0, 20, 0],
               transition: { 
-                duration: 8, 
+                duration: 12, 
                 repeat: Infinity,
                 repeatType: "reverse"
               }
             }}
           />
           <motion.div 
-            className="absolute w-40 h-40 rounded-full bg-green-400 opacity-30" 
+            className="absolute w-40 h-40 rounded-full bg-indigo-100 opacity-20" 
             style={{ bottom: '10%', right: '5%' }}
             animate={{ 
-              scale: [1, 1.3, 1],
+              scale: [1, 1.5, 1],
+              y: [0, -15, 0],
               transition: { 
-                duration: 6, 
+                duration: 10, 
                 repeat: Infinity,
                 repeatType: "reverse",
                 delay: 1
               }
             }}
           />
+          <motion.div 
+            className="absolute w-32 h-32 rounded-full bg-blue-400 opacity-20" 
+            style={{ top: '40%', left: '25%' }}
+            animate={{ 
+              scale: [1, 1.3, 1],
+              transition: { 
+                duration: 8, 
+                repeat: Infinity,
+                repeatType: "reverse",
+                delay: 2
+              }
+            }}
+          />
           
-          {/* Centered image */}
-          <div className="absolute inset-0 flex items-center justify-center p-8">
-            <motion.img 
-              src="https://images.unsplash.com/photo-1625417534120-f913817d9862?w=600&auto=format&fit=crop&q=60&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxzZWFyY2h8ODZ8fGNsYXNzaWMlMjBjYXJ8ZW58MHx8MHx8fDA%3D"
-              alt="Register illustration" 
-              className="max-w-full max-h-full rounded-lg shadow-lg"
+          {/* Abstract lines */}
+          <svg className="absolute inset-0 w-full h-full opacity-20" xmlns="http://www.w3.org/2000/svg">
+            <motion.path 
+              d="M0,100 Q80,50 160,100 T320,100 T480,100 T640,100 T800,100" 
+              stroke="rgba(255,255,255,0.3)" 
+              strokeWidth="2" 
+              fill="none"
+              initial={{ pathLength: 0, opacity: 0 }}
+              animate={{ 
+                pathLength: 1,
+                opacity: 0.3,
+                transition: { duration: 2, delay: 0.5 }
+              }}
+            />
+            <motion.path 
+              d="M0,150 Q80,200 160,150 T320,150 T480,150 T640,150 T800,150" 
+              stroke="rgba(255,255,255,0.3)" 
+              strokeWidth="2" 
+              fill="none"
+              initial={{ pathLength: 0, opacity: 0 }}
+              animate={{ 
+                pathLength: 1,
+                opacity: 0.3,
+                transition: { duration: 2, delay: 0.7 }
+              }}
+            />
+          </svg>
+          
+          {/* Centered content */}
+          <div className="absolute inset-0 flex flex-col items-center justify-center p-8">
+            <motion.div 
+              className="relative w-32 h-32 rounded-full bg-white/10 flex items-center justify-center backdrop-blur-sm mb-6"
               initial={{ opacity: 0, y: 20 }}
               animate={{ 
                 opacity: 1, 
                 y: 0,
-                transition: { 
-                  duration: 0.8, 
-                  delay: 0.6
-                }
+                transition: { duration: 0.8, delay: 0.6 }
               }}
-            />
+              whileHover={pulse}
+            >
+              <svg className="w-12 h-12 text-white" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg">
+                <path d="M8 9a3 3 0 100-6 3 3 0 000 6zM8 11a6 6 0 016 6H2a6 6 0 016-6zM16 7a1 1 0 10-2 0v1h-1a1 1 0 100 2h1v1a1 1 0 102 0v-1h1a1 1 0 100-2h-1V7z"></path>
+              </svg>
+            </motion.div>
+            
+            <motion.h3 
+              className="text-2xl font-bold text-white mb-2"
+              initial={{ opacity: 0, y: 20 }}
+              animate={{ 
+                opacity: 1, 
+                y: 0,
+                transition: { duration: 0.8, delay: 0.9 }
+              }}
+            >
+              Join Our Community
+            </motion.h3>
+            
+            <motion.p 
+              className="text-indigo-100 text-center max-w-xs"
+              initial={{ opacity: 0, y: 20 }}
+              animate={{ 
+                opacity: 1, 
+                y: 0,
+                transition: { duration: 0.8, delay: 1.1 }
+              }}
+            >
+              Create an account to access exclusive features and personalized experiences.
+            </motion.p>
+            
+            <motion.div 
+              className="mt-8 flex space-x-4"
+              initial={{ opacity: 0, y: 20 }}
+              animate={{ 
+                opacity: 1, 
+                y: 0,
+                transition: { duration: 0.8, delay: 1.3 }
+              }}
+            >
+              {/* Feature highlights */}
+              <div className="flex items-center text-white/90 text-sm">
+                <svg className="w-5 h-5 mr-2 text-indigo-300" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg">
+                  <path fillRule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clipRule="evenodd"></path>
+                </svg>
+                <span>Free Registration</span>
+              </div>
+              
+              <div className="flex items-center text-white/90 text-sm">
+                <svg className="w-5 h-5 mr-2 text-indigo-300" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg">
+                  <path fillRule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clipRule="evenodd"></path>
+                </svg>
+                <span>Premium Access</span>
+              </div>
+            </motion.div>
           </div>
-          
-          {/* Text on image */}
-          <motion.div 
-            className="absolute bottom-8 left-0 right-0 text-center text-white px-4"
-            initial={{ opacity: 0, y: 20 }}
-            animate={{ 
-              opacity: 1, 
-              y: 0,
-              transition: { 
-                duration: 0.8, 
-                delay: 0.9
-              }
-            }}
-          >
-            <h3 className="text-xl font-bold mb-2">Join Our Community</h3>
-            <p className="text-indigo-100 text-sm">Create an account to get started</p>
-          </motion.div>
         </motion.div>
 
         {/* Right side - Register form */}
@@ -175,128 +268,160 @@ const RegisterPage = () => {
         >
           {/* Title */}
           <motion.div className="text-center" variants={itemVariants}>
-            <h2 className="mt-6 text-3xl font-extrabold text-gray-900">Create a new account</h2>
-            <p className="mt-2 text-sm text-gray-600">
-              Or{' '}
-              <a href="/login" className="font-medium text-green-600 hover:text-green-500">
-                sign in to your existing account
-              </a>
+            <h2 className="mt-6 text-3xl font-extrabold text-gray-100">Create an account</h2>
+            <p className="mt-2 text-sm text-gray-400">
+              Already have an account?{' '}
+              <Link to="/login" className="font-medium text-green-400 hover:text-green-300 transition-colors duration-200">
+                Sign in instead
+              </Link>
             </p>
           </motion.div>
 
           {/* Register Form */}
-          <form className="mt-8 space-y-6" onSubmit={handleSubmit}>
+          <form className="mt-8 space-y-5" onSubmit={handleSubmit}>
             <div className="rounded-md space-y-4">
               <motion.div variants={itemVariants}>
-                <label htmlFor="full-name" className="block text-sm font-medium text-gray-700">
+                <label htmlFor="full-name" className="block text-sm font-medium text-gray-300">
                   Full Name
                 </label>
-                <input
-                  id="full-name"
-                  name="fullName"
-                  type="text"
-                  required
-                  value={formData.fullName}
-                  onChange={handleChange}
-                  className="appearance-none rounded-md relative block w-full px-3 py-2 border border-gray-300 placeholder-gray-500 text-gray-900 focus:outline-none focus:ring-green-500 focus:border-green-500 focus:z-10 sm:text-sm"
-                  placeholder="Enter your full name"
-                />
+                <div className="mt-1 relative rounded-md shadow-sm">
+                  <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
+                    <svg className="h-5 w-5 text-gray-500" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor">
+                      <path fillRule="evenodd" d="M10 9a3 3 0 100-6 3 3 0 000 6zm-7 9a7 7 0 1114 0H3z" clipRule="evenodd" />
+                    </svg>
+                  </div>
+                  <input
+                    id="full-name"
+                    name="fullName"
+                    type="text"
+                    required
+                    value={formData.fullName}
+                    onChange={handleChange}
+                    className="bg-gray-800 focus:ring-indigo-500 focus:border-indigo-500 block w-full pl-10 pr-3 py-3 border border-gray-700 rounded-md shadow-sm placeholder-gray-400 text-gray-100 text-sm transition-colors duration-200"
+                    placeholder="Enter your full name"
+                  />
+                </div>
               </motion.div>
               
               <motion.div variants={itemVariants}>
-                <label htmlFor="email-address" className="block text-sm font-medium text-gray-700">
+                <label htmlFor="email-address" className="block text-sm font-medium text-gray-300">
                   Email address
                 </label>
-                <input
-                  id="email-address"
-                  name="email"
-                  type="email"
-                  autoComplete="email"
-                  required
-                  value={formData.email}
-                  onChange={handleChange}
-                  className="appearance-none rounded-md relative block w-full px-3 py-2 border border-gray-300 placeholder-gray-500 text-gray-900 focus:outline-none focus:ring-green-500 focus:border-green-500 focus:z-10 sm:text-sm"
-                  placeholder="Enter your email"
-                />
+                <div className="mt-1 relative rounded-md shadow-sm">
+                  <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
+                    <svg className="h-5 w-5 text-gray-500" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor">
+                      <path d="M2.003 5.884L10 9.882l7.997-3.998A2 2 0 0016 4H4a2 2 0 00-1.997 1.884z" />
+                      <path d="M18 8.118l-8 4-8-4V14a2 2 0 002 2h12a2 2 0 002-2V8.118z" />
+                    </svg>
+                  </div>
+                  <input
+                    id="email-address"
+                    name="email"
+                    type="email"
+                    autoComplete="email"
+                    required
+                    value={formData.email}
+                    onChange={handleChange}
+                    className="bg-gray-800 focus:ring-indigo-500 focus:border-indigo-500 block w-full pl-10 pr-3 py-3 border border-gray-700 rounded-md shadow-sm placeholder-gray-400 text-gray-100 text-sm transition-colors duration-200"
+                    placeholder="Enter your email"
+                  />
+                </div>
               </motion.div>
               
-              {/* New Phone Number Field */}
+              {/* Phone Number Field */}
               <motion.div variants={itemVariants}>
-                <label htmlFor="phone-number" className="block text-sm font-medium text-gray-700">
+                <label htmlFor="phone-number" className="block text-sm font-medium text-gray-300">
                   Phone Number
                 </label>
-                <input
-                  id="phone-number"
-                  name="phoneNumber"
-                  type="tel"
-                  required
-                  value={formData.phoneNumber}
-                  onChange={handleChange}
-                  className="appearance-none rounded-md relative block w-full px-3 py-2 border border-gray-300 placeholder-gray-500 text-gray-900 focus:outline-none focus:ring-green-500 focus:border-green-500 focus:z-10 sm:text-sm"
-                  placeholder="Enter your phone number"
-                  pattern="[0-9]{10}" // Example: Enforces 10-digit phone number
-                />
+                <div className="mt-1 relative rounded-md shadow-sm">
+                  <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
+                    <svg className="h-5 w-5 text-gray-500" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor">
+                      <path d="M2 3a1 1 0 011-1h2.153a1 1 0 01.986.836l.74 4.435a1 1 0 01-.54 1.06l-1.548.773a11.037 11.037 0 006.105 6.105l.774-1.548a1 1 0 011.059-.54l4.435.74a1 1 0 01.836.986V17a1 1 0 01-1 1h-2C7.82 18 2 12.18 2 5V3z" />
+                    </svg>
+                  </div>
+                  <input
+                    id="phone-number"
+                    name="phoneNumber"
+                    type="tel"
+                    required
+                    value={formData.phoneNumber}
+                    onChange={handleChange}
+                    className="bg-gray-800 focus:ring-indigo-500 focus:border-indigo-500 block w-full pl-10 pr-3 py-3 border border-gray-700 rounded-md shadow-sm placeholder-gray-400 text-gray-100 text-sm transition-colors duration-200"
+                    placeholder="Enter your phone number"
+                  />
+                </div>
               </motion.div>
 
-{/* New Role Field */}
-<motion.div variants={itemVariants}>
-                <label htmlFor="role" className="block text-sm font-medium text-gray-700">
+              {/* Role Field */}
+              <motion.div variants={itemVariants}>
+                <label htmlFor="role" className="block text-sm font-medium text-gray-300">
                   Role
                 </label>
-                <select
-                  id="role"
-                  name="role"
-                  required
-                  value={formData.role}
-                  onChange={handleChange}
-                  className="appearance-none rounded-md relative block w-full px-3 py-2 border border-gray-300 placeholder-gray-500 text-gray-900 focus:outline-none focus:ring-green-500 focus:border-green-500 focus:z-10 sm:text-sm"
-                >
-                  <option value="">Select your role</option>
-                  <option value="user">User</option>
-                  <option value="admin">Admin</option>
-                 
-                </select>
+                <div className="mt-1 relative rounded-md shadow-sm">
+                  <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
+                    <svg className="h-5 w-5 text-gray-500" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor">
+                      <path fillRule="evenodd" d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-6-3a2 2 0 11-4 0 2 2 0 014 0zm-2 4a5 5 0 00-4.546 2.916A5.986 5.986 0 0010 16a5.986 5.986 0 004.546-2.084A5 5 0 0010 11z" clipRule="evenodd" />
+                    </svg>
+                  </div>
+                  <select
+                    id="role"
+                    name="role"
+                    required
+                    value={formData.role}
+                    onChange={handleChange}
+                    className="bg-gray-800 focus:ring-indigo-500 focus:border-indigo-500 block w-full pl-10 pr-3 py-3 border border-gray-700 rounded-md shadow-sm placeholder-gray-400 text-gray-100 text-sm transition-colors duration-200"
+                  >
+                    <option value="">Select your role</option>
+                    <option value="user">User</option>
+                    <option value="admin">Admin</option>
+                  </select>
+                </div>
               </motion.div>
-
-
-
-
-
-
-
-
-
               
               <motion.div variants={itemVariants}>
-                <label htmlFor="password" className="block text-sm font-medium text-gray-700">
+                <label htmlFor="password" className="block text-sm font-medium text-gray-300">
                   Password
                 </label>
-                <input
-                  id="password"
-                  name="password"
-                  type="password"
-                  required
-                  value={formData.password}
-                  onChange={handleChange}
-                  className="appearance-none rounded-md relative block w-full px-3 py-2 border border-gray-300 placeholder-gray-500 text-gray-900 focus:outline-none focus:ring-green-500 focus:border-green-500 focus:z-10 sm:text-sm"
-                  placeholder="Create a password"
-                />
+                <div className="mt-1 relative rounded-md shadow-sm">
+                  <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
+                    <svg className="h-5 w-5 text-gray-500" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor">
+                      <path fillRule="evenodd" d="M5 9V7a5 5 0 0110 0v2a2 2 0 012 2v5a2 2 0 01-2 2H5a2 2 0 01-2-2v-5a2 2 0 012-2zm8-2v2H7V7a3 3 0 016 0z" clipRule="evenodd" />
+                    </svg>
+                  </div>
+                  <input
+                    id="password"
+                    name="password"
+                    type="password"
+                    required
+                    value={formData.password}
+                    onChange={handleChange}
+                    className="bg-gray-800 focus:ring-indigo-500 focus:border-indigo-500 block w-full pl-10 pr-3 py-3 border border-gray-700 rounded-md shadow-sm placeholder-gray-400 text-gray-100 text-sm transition-colors duration-200"
+                    placeholder="Create a password"
+                  />
+                </div>
               </motion.div>
               
               <motion.div variants={itemVariants}>
-                <label htmlFor="confirm-password" className="block text-sm font-medium text-gray-700">
+                <label htmlFor="confirm-password" className="block text-sm font-medium text-gray-300">
                   Confirm Password
                 </label>
-                <input
-                  id="confirm-password"
-                  name="confirmPassword"
-                  type="password"
-                  required
-                  value={formData.confirmPassword}
-                  onChange={handleChange}
-                  className="appearance-none rounded-md relative block w-full px-3 py-2 border border-gray-300 placeholder-gray-500 text-gray-900 focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 focus:z-10 sm:text-sm"
-                  placeholder="Confirm your password"
-                />
+                <div className="mt-1 relative rounded-md shadow-sm">
+                  <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
+                    <svg className="h-5 w-5 text-gray-500" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor">
+                      <path fillRule="evenodd" d="M5 9V7a5 5 0 0110 0v2a2 2 0 012 2v5a2 2 0 01-2 2H5a2 2 0 01-2-2v-5a2 2 0 012-2zm8-2v2H7V7a3 3 0 016 0z" clipRule="evenodd" />
+                    </svg>
+                  </div>
+                  <input
+                    id="confirm-password"
+                    name="confirmPassword"
+                    type="password"
+                    required
+                    value={formData.confirmPassword}
+                    onChange={handleChange}
+                    className="bg-gray-800 focus:ring-green-500 focus:border-green-500 block w-full pl-10 pr-3 py-3 border border-gray-700 rounded-md shadow-sm placeholder-gray-400 text-gray-100 text-sm transition-colors duration-200"
+                    placeholder="Confirm your password"
+                  />
+                </div>
               </motion.div>
             </div>
 
@@ -307,22 +432,24 @@ const RegisterPage = () => {
                 type="checkbox"
                 checked={acceptTerms}
                 onChange={(e) => setAcceptTerms(e.target.checked)}
-                className="h-4 w-4 text-indigo-600 focus:ring-indigo-500 border-gray-300 rounded"
+                className="h-4 w-4 text-green-600 focus:ring-green-500 border-gray-700 rounded bg-gray-800"
                 required
               />
-              <label htmlFor="accept-terms" className="ml-2 block text-sm text-gray-900">
-                I accept the <a href="#" className="text-indigo-600 hover:text-indigo-500">Terms and Conditions</a>
+              <label htmlFor="accept-terms" className="ml-2 block text-sm text-gray-300">
+                I accept the <a href="#" className="text-green-400 hover:text-green-300 transition-colors duration-200">Terms and Conditions</a>
               </label>
             </motion.div>
 
             <motion.div variants={itemVariants}>
-              <button
+              <motion.button
                 type="submit"
-                className="group relative w-full flex justify-center py-2 px-4 border border-transparent text-sm font-medium rounded-md text-white bg-green-600 hover:bg-green-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-green-500"
+                whileHover={{ scale: 1.02 }}
+                whileTap={{ scale: 0.98 }}
+                className="group relative w-full flex justify-center py-3 px-4 border border-transparent text-sm font-medium rounded-md text-white bg-green-600 hover:bg-green-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 transition-colors duration-200"
               >
                 <span className="absolute left-0 inset-y-0 flex items-center pl-3">
                   <svg
-                    className="h-5 w-5 text-green-500 group-hover:text-green-400"
+                    className="h-5 w-5 text-green-400 green-hover:text-indigo-300"
                     xmlns="http://www.w3.org/2000/svg"
                     viewBox="0 0 20 20"
                     fill="currentColor"
@@ -335,8 +462,8 @@ const RegisterPage = () => {
                     />
                   </svg>
                 </span>
-                Sign up
-              </button>
+                Create Account
+              </motion.button>
             </motion.div>
           </form>
 
@@ -344,17 +471,19 @@ const RegisterPage = () => {
           <div className="mt-6">
             <motion.div className="relative" variants={itemVariants}>
               <div className="absolute inset-0 flex items-center">
-                <div className="w-full border-t border-gray-300" />
+                <div className="w-full border-t border-gray-700" />
               </div>
               <div className="relative flex justify-center text-sm">
-                <span className="px-2 bg-white text-gray-500">Or sign up with</span>
+                <span className="px-2 bg-gray-900 text-gray-400">Or continue with</span>
               </div>
             </motion.div>
 
             <motion.div className="mt-6" variants={itemVariants}>
-              <button
+              <motion.button
                 onClick={() => console.log('Attempting to register with Google')}
-                className="w-full flex justify-center items-center py-2 px-4 border border-gray-300 rounded-md shadow-sm bg-white text-sm font-medium text-gray-500 hover:bg-gray-50"
+                whileHover={{ scale: 1.02 }}
+                whileTap={{ scale: 0.98 }}
+                className="w-full flex justify-center items-center py-3 px-4 border border-gray-700 rounded-md shadow-sm bg-gray-800 text-sm font-medium text-gray-300 hover:bg-gray-700 transition-colors duration-200"
               >
                 <svg className="w-5 h-5 mr-2" viewBox="0 0 24 24">
                   <path
@@ -375,11 +504,11 @@ const RegisterPage = () => {
                   />
                 </svg>
                 Sign up with Google
-              </button>
+              </motion.button>
             </motion.div>
           </div>
         </motion.div>
-      </div>
+      </motion.div>
     </div>
   );
 };

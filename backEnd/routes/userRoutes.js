@@ -40,4 +40,9 @@ router.put("/:id", protect, isAdmin, userController.updateUser);
 
 
 
+// مسار جلب عدد المستخدمين المسجلين
+router.get('/user-count', userController.getUserCount);
+
+
+
 module.exports = router;

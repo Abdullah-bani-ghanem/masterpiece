@@ -58,54 +58,7 @@ exports.getComments = async (req, res) => {
 
 
 
-
-
-
-
-// دالة لجلب كل التعليقات
-// exports.getAllComments = async (req, res) => {
-//     try {
-//       const comments = await Comment.find()
-//         .populate('carId', 'name')  // إظهار اسم السيارة
-//         .populate('userId', 'name email')  // إظهار معلومات المستخدم
-//         .sort({ createdAt: -1 });  // ترتيب التعليقات من الأحدث إلى الأقدم
-
-//       res.json(comments);
-//     } catch (err) {
-//       console.error(err);
-//       res.status(500).json({ message: 'Failed to load comments.' });
-//     }
-//   };
-
-// دالة لجلب جميع التعليقات
-// exports.getComments = async (req, res) => {
-//     try {
-
-//         const comments = await Comment.find()
-//             .populate('userId', 'name email username')  // التأكد من أن `username` يتم استرجاعه
-//             .sort({ createdAt: -1 });  // ترتيب التعليقات من الأحدث إلى الأقدم
-
-//         res.json(comments);
-//     } catch (err) {
-//         console.error('Error fetching comments:', err);  // سجل الخطأ
-//         res.status(500).json({ message: 'Failed to load comments.' });
-//     }
-// };
-
-
-
 exports.getAllComments = async (req, res) => {
-//     try {
-
-//         const comments = await Comment.find()
-//             .populate('userId', 'name email username')  // التأكد من أن `username` يتم استرجاعه
-//             .sort({ createdAt: -1 });  // ترتيب التعليقات من الأحدث إلى الأقدم
-
-//         res.json(comments);
-//     } catch (err) {
-//         console.error('Error fetching comments:', err);  // سجل الخطأ
-//         res.status(500).json({ message: 'Failed to load comments.' });
-//     }
     try {
 
         const comments = await Comment.find()
@@ -168,19 +121,8 @@ exports.deleteComment = async (req, res) => {
 
 
 
-// دالة لحذف تعليق معين
-// exports.adminDeleteComment = async (req, res) => {
-//     try {
-//         const comments = await Comment.find()
-//             .populate('userId', 'name email username')  // التأكد من أن `username` يتم استرجاعه
-//             .sort({ createdAt: -1 });  // ترتيب التعليقات من الأحدث إلى الأقدم
 
-//         res.json(comments);
-//     } catch (err) {
-//         console.error(err);
-//         res.status(500).json({ message: 'Failed to load comments.' });
-//     }
-// };
+
 exports.adminDeleteComment = async (req, res) => {
     const { commentId } = req.params;
 

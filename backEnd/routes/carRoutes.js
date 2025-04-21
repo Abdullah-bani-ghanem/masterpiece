@@ -52,6 +52,10 @@ router.get('/approved-cars/:id', carController.getApprovedCars);////
 router.delete('/:id', carController.deleteCar);////
 
 
+// مسار جلب عدد السيارات المعتمدة
+router.get('/approved-car-count', carController.getApprovedCarCount);
+
+
 
 // // مسار لإضافة تعليق
 // router.post('/:carId/comments', carController.addComment);

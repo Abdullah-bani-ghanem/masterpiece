@@ -219,10 +219,10 @@ function Cars() {
                   <div className="flex items-center space-x-2">
                     <input
                       type="number"
-                      placeholder="Max"
+                      placeholder="Min"
                       className="w-full p-2 rounded bg-gray-700 border border-gray-600"
-                      value={filters.priceRange[1]}
-                      onChange={(e) => handleFilterChange('priceRange', [filters.priceRange[0], parseInt(e.target.value) || 1000000])}
+                      value={filters.priceRange[0]}
+                      onChange={(e) => handleFilterChange('priceRange', [parseInt(e.target.value) || 0, filters.priceRange[1]])}
                     />
                     <span>to</span>
                     <input
@@ -230,7 +230,7 @@ function Cars() {
                       placeholder="Max"
                       className="w-full p-2 rounded bg-gray-700 border border-gray-600"
                       value={filters.priceRange[1]}
-                      onChange={(e) => handleFilterChange('priceRange', [filters.priceRange[0], parseInt(e.target.value) || 50000])}
+                      onChange={(e) => handleFilterChange('priceRange', [filters.priceRange[0], parseInt(e.target.value) || 1000000])}
                     />
                   </div>
                 </div>
@@ -272,7 +272,7 @@ function Cars() {
               <div className="mt-4 flex justify-end">
                 <button
                   onClick={() => setFilters({
-                    priceRange: [0, 50000],
+                    priceRange: [0, 1000000],
                     year: '',
                     make: '',
                     model: '',
@@ -304,8 +304,8 @@ function Cars() {
       </div>
 
       <div className="max-w-7xl mx-auto px-4">
-        {/* Results Section Header */}
-        <div className="mb-8 flex justify-between items-center">
+        {/* Results Section Header - MODIFIED WITH ADD CAR BUTTON */}
+        <div className="mb-8 flex flex-col md:flex-row justify-between items-center">
           <div className="w-full">
             <p className="font-[cursive] text-5xl text-green-400 font-semibold text-center">
               Available Classic Cars
@@ -321,6 +321,16 @@ function Cars() {
               </p>
             )}
           </div>
+          
+          {/* Add Car For Sale Button */}
+          <Link to="/form" className="mt-4 md:mt-0">
+            <button className="bg-green-600 hover:bg-green-700 text-white py-3 px-6 rounded-lg transition-colors duration-300 font-medium flex items-center">
+              <span className="mr-2">Add a car for sale</span>
+              <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5" viewBox="0 0 20 20" fill="currentColor">
+                <path fillRule="evenodd" d="M10 5a1 1 0 011 1v3h3a1 1 0 110 2h-3v3a1 1 0 11-2 0v-3H6a1 1 0 110-2h3V6a1 1 0 011-1z" clipRule="evenodd" />
+              </svg>
+            </button>
+          </Link>
         </div>
 
         {/* Loading State */}

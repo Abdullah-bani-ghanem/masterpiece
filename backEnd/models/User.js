@@ -31,7 +31,7 @@ const userSchema = new mongoose.Schema({
   },
   username: {
     type: String,
-    required: true,  // تأكد من أن `username` موجود ومطلوب
+    // required: true,  // تأكد من أن `username` موجود ومطلوب
     unique: true
   },
   email: {

@@ -1,49 +1,11 @@
-// import React from 'react'
-// import carImg from '../assets/heroCar.png'
-// import Slider from '../Component/Slider'
-// import ClassicCarsSection from '../Component/sectionHome'
-
-// function Home() {
-
-//   return (
-//     <>
-
-// <div style={{ position: "relative" }}>
-//   <p  className="absolute top-[200px] left-[370px] text-white font-[cursive] text-[84px] font-bold ">
-//     Driven By Drivers
-//   </p>
-
-//   <img  className="h-[700px] w-full" src={carImg} />
-// </div>
-
-
-//     <div className='text-center font-extrabold dark:bg-gray-900 text-white ' style={{height:"250px" }}>
-//         <p style={{fontSize:"40px",fontFamily:"cursive"}}>Welcome to Classic – Your destination for timeless classic cars</p>
-//         <p className="font-[cursive] text-[25px]"  >"Are you a fan of classic cars? Here at Classic, we offer a curated selection of original classic cars that combine luxury and history. Browse our collection of unique vehicles and enjoy an exceptional buying experience. Every car has a story, discover the story that sets you apart.". 🚗✨.</p>
-//     </div>
-
-
-// <Slider/>
-
-// <ClassicCarsSection/>
-
-
-
-//     </>
-//   )
-// }
-
-// export default Home
-
-
-
 import React, { useState, useEffect, useRef } from 'react';
 import { motion } from 'framer-motion';
 import { ChevronRight, Star, Calendar, Clock, Map, Phone, Mail, ArrowRight, Search } from 'lucide-react';
 import { FaArrowUp, FaComments, FaTimes } from 'react-icons/fa'; // Import all required icons
-import heroCar from '../assets/heroCar.png';
+import heroCar from '../../src/img/122.png';
 import Slider from '../Component/Slider';
 import ClassicCarsSection from '../Component/sectionHome';
+import axios from 'axios';
 
 function Home() {
   const [isScrolled, setIsScrolled] = useState(false);
@@ -53,6 +15,8 @@ function Home() {
   const [chatHistory, setChatHistory] = useState([
     { sender: 'bot', message: 'Hello! How can I help you with your classic car journey today?' }
   ]);
+  const [userCount, setUserCount] = useState(0);
+  const [approvedCarCount, setApprovedCarCount] = useState(0);
 
   const chatEndRef = useRef(null);
 
@@ -113,6 +77,57 @@ function Home() {
       behavior: 'smooth'
     });
   };
+
+
+
+  useEffect(() => {
+    // جلب عدد المستخدمين المسجلين
+    const fetchUserCount = async () => {
+      try {
+        const token = localStorage.getItem('token');
+        if (!token) {
+          console.error("No token found!");
+          return;
+        }
+        
+        const res = await axios.get("/api/users", {
+          headers: { Authorization: `Bearer ${token}` },
+      });
+
+        // عرض النتيجة في الكونسول
+        setUserCount(res.data.length); // تعيين عدد المستخدمين في ال state
+      } catch (err) {
+        console.error('Error fetching user count:', err);
+      }
+    };
+
+
+    // جلب عدد السيارات المعتمدة
+    const fetchApprovedCarCount = async () => {
+      try {
+        const token = localStorage.getItem('token');
+        if (!token) {
+          console.error("No token found!");
+          return;
+        }
+      
+        const res = await axios.get("/api/cars/all", {
+          headers: { Authorization: `Bearer ${token}` },
+        });
+        
+        const cars=res.data;
+        const approved = cars.filter(c => c.status === "approved");
+        setApprovedCarCount(approved.length); // تعيين عدد السيارات المعتمدة في ال state
+      } catch (err) {
+        console.error('Error fetching approved car count:', err);
+      }
+    };
+
+    fetchUserCount(); // جلب عدد المستخدمين
+    fetchApprovedCarCount(); // جلب عدد السيارات المعتمدة
+  }, []); // فقط عند تحميل الصفحة
+
+
 
   // Handle chat submission
   const handleChatSubmit = (e) => {
@@ -175,7 +190,7 @@ function Home() {
     <div className="bg-gray-50 dark:bg-gray-900">
       {/* Hero Section with Enhanced CTA */}
       <div className="relative h-screen">
-        <div className="absolute inset-0 bg-black/40 z-10"></div>
+        <div className="absolute inset-0 z-10"></div>
         <div className="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 z-20 text-center w-full max-w-4xl px-4">
           <motion.h1
             initial={{ opacity: 0, y: 20 }}
@@ -201,6 +216,7 @@ function Home() {
 
 
       {/* Welcome Section with Animation */}
+      <div className="p-8">
       <motion.div
         initial={{ opacity: 0 }}
         whileInView={{ opacity: 1 }}
@@ -214,12 +230,12 @@ function Home() {
         </p>
         <div className="flex justify-center gap-8 mt-10">
           <div className="text-center">
-            <div className="font-[cursive] text-green-600 text-5xl font-bold mb-2">500+</div>
-            <div className="font-[cursive] text-gray-600 dark:text-gray-400">Classic Cars</div>
+            <div className="font-[cursive] text-green-600 text-5xl font-bold mb-2">{userCount}+</div>
+            <div className="font-[cursive] text-gray-600 dark:text-gray-400">Happy Clients</div>
           </div>
           <div className="text-center">
-            <div className="font-[cursive] text-green-600 text-5xl font-bold mb-2">35+</div>
-            <div className="font-[cursive] text-gray-600 dark:text-gray-400">Years Experience</div>
+            <div className="font-[cursive] text-green-600 text-5xl font-bold mb-2">{approvedCarCount}+</div>
+            <div className="font-[cursive] text-gray-600 dark:text-gray-400">Classic Cars</div>
           </div>
           <div className="text-center">
             <div className="font-[cursive] text-green-600 text-5xl font-bold mb-2">2500+</div>
@@ -227,7 +243,8 @@ function Home() {
           </div>
         </div>
       </motion.div>
-
+    </div>
+  
 
 
       {/* Original Slider Component */}
@@ -241,12 +258,7 @@ function Home() {
           <h2 className="font-[cursive] text-5xl font-bold dark:text-white text-center">
             Featured Listings
           </h2>
-          <a
-            href="/cars"
-            className="absolute right-0 top-1/2 -translate-y-1/2 flex items-center text-green-600 hover:text-green-700 font-semibold"
-          >
-            View All Vehicles <ChevronRight size={20} />
-          </a>
+          
         </div>
 
 

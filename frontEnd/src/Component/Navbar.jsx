@@ -2,6 +2,7 @@ import React from 'react';
 import { Link, useNavigate } from "react-router-dom";
 import { useState, useEffect } from "react";
 import axios from 'axios';
+import Swal from 'sweetalert2';
 
 
 function Navbar() {
@@ -104,10 +105,34 @@ function Navbar() {
       await axios.post("http://localhost:5000/api/users/logout", {}, { withCredentials: true });
       setIsAuthenticated(false);
       setUserName('');
-      alert("Logged out successfully!");
-      navigate('/'); // Optional: redirect to home page
+      
+      // Using SweetAlert with gray-800 background
+      Swal.fire({
+        title: 'Success!',
+        text: 'Logged out successfully',
+        icon: 'success',
+        confirmButtonText: 'OK',
+        timer: 2000,
+        timerProgressBar: true,
+        background: '#1f2937', // This is the equivalent of gray-800
+        iconColor: '#10b981', // A nice green color for the success icon
+        color: '#ffffff', // White text for better contrast
+        confirmButtonColor: '#3b82f6' // Blue button
+      });
+      
+      navigate('/'); // Redirect to home page
     } catch (error) {
-      alert("Error during logout!");
+      // Using SweetAlert with gray-800 background for error too
+      Swal.fire({
+        title: 'Error!',
+        text: 'An error occurred during logout',
+        icon: 'error',
+        confirmButtonText: 'OK',
+        background: '#1f2937', // gray-800
+        iconColor: '#ef4444', // Red color for the error icon
+        color: '#ffffff', // White text
+        confirmButtonColor: '#3b82f6' // Blue button
+      });
     }
   };
 
@@ -258,7 +283,7 @@ function Navbar() {
 
 
 
-            <li>
+            {/* <li>
               <Link
                 to="/form"
                 className="font-[cursive] block py-2 px-3 text-2xl md:p-0 text-gray-900 rounded-lg hover:bg-gray-100 md:hover:bg-transparent md:hover:text-green-600 dark:text-white md:dark:hover:text-green-500 dark:hover:bg-gray-700 dark:hover:text-white md:dark:hover:bg-transparent dark:border-gray-700 transition-colors duration-300"
@@ -266,7 +291,7 @@ function Navbar() {
                 form
               </Link>
 
-            </li>
+            </li> */}
 
 
 

@@ -208,8 +208,8 @@ const CarDetails = () => {
                         {car.name}
                     </h1>
                     <div className="flex items-center justify-center mb-6">
-                        <div className="h-px w-20 bg-amber-300"></div>
-                        <div className="h-px w-20 bg-amber-300"></div>
+                        <div className="h-px w-20 bg-green-600"></div>
+                        <div className="h-px w-20 bg-green-600"></div>
                     </div>
                 </div>
 
@@ -235,7 +235,7 @@ const CarDetails = () => {
                             <div className="absolute inset-0 bg-gradient-to-t from-black via-transparent to-transparent opacity-60"></div>
 
                             {/* Price Badge */}
-                            <div className="absolute top-6 right-6 bg-black bg-opacity-80 text-amber-300 px-6 py-3 rounded-full backdrop-blur-sm border border-amber-300/30">
+                            <div className="absolute top-6 right-6 bg-black bg-opacity-80 text-green-500 px-6 py-3 rounded-full backdrop-blur-sm border border-amber-300/30">
                                 <span className="text-sm uppercase tracking-wider mr-2">Price</span>
                                 <span className="text-2xl font-serif font-bold">${formatPrice(car.price)}</span>
                             </div>
@@ -243,8 +243,8 @@ const CarDetails = () => {
                             {/* Status Badge */}
                             {car.status && (
                                 <div className="absolute top-6 left-6 bg-black bg-opacity-80 px-4 py-2 rounded-full backdrop-blur-sm border border-gray-700">
-                                    <span className={`text-sm font-medium ${car.status === 'approved' ? 'text-emerald-400' :
-                                        car.status === 'rejected' ? 'text-red-400' : 'text-amber-400'
+                                    <span className={`text-sm font-medium ${car.status === 'approved' ? 'text-green-400' :
+                                        car.status === 'rejected' ? 'text-red-400' : 'text-green-400'
                                         }`}>
                                         {car.status === 'approved' ? 'Approved' :
                                             car.status === 'rejected' ? 'Rejected' : 'Pending Review'}
@@ -260,7 +260,7 @@ const CarDetails = () => {
                                     {car.images.map((image, index) => (
                                         <div
                                             key={index}
-                                            className={`cursor-pointer rounded-md overflow-hidden ${activeImage === index ? 'ring-2 ring-amber-400' : 'opacity-60 hover:opacity-100'
+                                            className={`cursor-pointer rounded-md overflow-hidden ${activeImage === index ? 'ring-2 ring-green-400' : 'opacity-60 hover:opacity-100'
                                                 } transition duration-300`}
                                             onClick={() => handleImageChange(index)}
                                         >
@@ -282,7 +282,7 @@ const CarDetails = () => {
                         <div className="grid grid-cols-3 md:grid-cols-5 gap-4 mb-12">
                             <div className="text-center">
                                 <div className="flex justify-center">
-                                    <Calendar size={24} className="text-amber-300 mb-2" />
+                                    <Calendar size={24} className="text-green-500 mb-2" />
                                 </div>
                                 <div className="text-gray-400 text-xs uppercase mb-1">Year</div>
                                 <div className="text-white font-medium">{car.year}</div>
@@ -290,7 +290,7 @@ const CarDetails = () => {
 
                             <div className="text-center">
                                 <div className="flex justify-center">
-                                    <Star size={24} className="text-amber-300 mb-2" />
+                                    <Star size={24} className="text-green-500  mb-2" />
                                 </div>
                                 <div className="text-gray-400 text-xs uppercase mb-1">Brand</div>
                                 <div className="text-white font-medium">{car.brand}</div>
@@ -298,7 +298,7 @@ const CarDetails = () => {
 
                             <div className="text-center">
                                 <div className="flex justify-center">
-                                    <Truck size={24} className="text-amber-300 mb-2" />
+                                    <Truck size={24} className="text-green-500  mb-2" />
                                 </div>
                                 <div className="text-gray-400 text-xs uppercase mb-1">Model</div>
                                 <div className="text-white font-medium">{car.model}</div>
@@ -306,7 +306,7 @@ const CarDetails = () => {
 
                             <div className="text-center">
                                 <div className="flex justify-center">
-                                    <Activity size={24} className="text-amber-300 mb-2" />
+                                    <Activity size={24} className="text-green-500  mb-2" />
                                 </div>
                                 <div className="text-gray-400 text-xs uppercase mb-1">Condition</div>
                                 <div className="text-white font-medium">{car.condition === 'new' ? 'New' : 'Used'}</div>
@@ -314,7 +314,7 @@ const CarDetails = () => {
 
                             <div className="text-center">
                                 <div className="flex justify-center">
-                                    <Clock size={24} className="text-amber-300 mb-2" />
+                                    <Clock size={24} className="text-green-500  mb-2" />
                                 </div>
                                 <div className="text-gray-400 text-xs uppercase mb-1">Listing Date</div>
                                 <div className="text-white font-medium">{formatDate(car.createdAt)}</div>
@@ -326,7 +326,7 @@ const CarDetails = () => {
                             {/* Left Column */}
                             <div>
                                 <h2 className="text-2xl font-serif text-white mb-6 flex items-center">
-                                    <span className="inline-block w-8 h-px bg-amber-300 mr-3"></span>
+                                    <span className="inline-block w-8 h-px bg-green-500 mr-3"></span>
                                     Vehicle Details
                                 </h2>
 
@@ -361,7 +361,7 @@ const CarDetails = () => {
                             {/* Right Column */}
                             <div>
                                 <h2 className="text-2xl font-serif text-white mb-6 flex items-center">
-                                    <span className="inline-block w-8 h-px bg-amber-300 mr-3"></span>
+                                    <span className="inline-block w-8 h-px bg-green-500 mr-3"></span>
                                     Additional Information
                                 </h2>
 
@@ -374,7 +374,7 @@ const CarDetails = () => {
                                     <div className="flex justify-between items-center border-b border-gray-700 pb-3">
                                         <span className="text-gray-300">Request Status</span>
                                         <span className={`font-medium ${car.status === 'approved' ? 'text-emerald-400' :
-                                            car.status === 'rejected' ? 'text-red-400' : 'text-amber-400'
+                                            car.status === 'rejected' ? 'text-red-400' : 'text-green-500'
                                             }`}>
                                             {car.status === 'approved' ? 'Approved' :
                                                 car.status === 'rejected' ? 'Rejected' : 'Pending Review'}
@@ -405,7 +405,7 @@ const CarDetails = () => {
                         {car.description && (
                             <div className="mb-12">
                                 <h2 className="text-2xl font-serif text-white mb-6 flex items-center">
-                                    <span className="inline-block w-8 h-px bg-amber-300 mr-3"></span>
+                                    <span className="inline-block w-8 h-px bg-green-500 mr-3"></span>
                                     Vehicle Description
                                 </h2>
                                 <div className="bg-gray-800 bg-opacity-50 rounded-lg p-6 border border-gray-700">
@@ -417,8 +417,8 @@ const CarDetails = () => {
                         {/* Comments Section */}
                         <div className="mb-12">
                             <h2 className="text-2xl font-serif text-white mb-6 flex items-center">
-                                <span className="inline-block w-8 h-px bg-amber-300 mr-3"></span>
-                                <MessageSquare size={20} className="text-amber-300 mr-2" />
+                                <span className="inline-block w-8 h-px bg-green-500 mr-3"></span>
+                                <MessageSquare size={20} className="text-green-500 mr-2" />
                                 Comments
                             </h2>
 
@@ -432,7 +432,7 @@ const CarDetails = () => {
                                 ></textarea>
                                 <button
                                     onClick={handleAddComment}
-                                    className="bg-amber-300 hover:bg-amber-400 text-black font-medium py-2 px-6 rounded-md transition duration-300 flex items-center"
+                                    className="bg-green-500 hover:bg-amber-400 text-black font-medium py-2 px-6 rounded-md transition duration-300 flex items-center"
                                 >
                                     <MessageSquare size={16} className="mr-2" />
                                     Add Comment
@@ -445,7 +445,7 @@ const CarDetails = () => {
                                     comments.map((comment, index) => (
                                         <div key={index} className="bg-gray-800 bg-opacity-50 rounded-lg p-5 border border-gray-700 hover:border-gray-600 transition duration-300">
                                             <div className="flex items-center mb-3">
-                                                <div className="w-10 h-10 rounded-full bg-gradient-to-br from-amber-400 to-amber-600 mr-3 flex items-center justify-center text-black font-bold text-sm">
+                                                <div className="w-10 h-10 rounded-full bg-gradient-to-br from-green-100 to-green-600 mr-3 flex items-center justify-center text-black font-bold text-sm">
                                                     {comment.user && comment.user.username ? comment.user.username.charAt(0).toUpperCase() : 'U'}
                                                 </div>
                                                 <div>
@@ -508,21 +508,21 @@ const CarDetails = () => {
                             <div className="grid grid-cols-3 gap-6 mb-8 mt-10">
                                 <div className="text-center">
                                     <div className="mb-3 flex justify-center">
-                                        <Shield size={32} className="text-amber-300" />
+                                        <Shield size={32} className="text-green-500" />
                                     </div>
                                     <h4 className="text-white text-sm font-medium mb-1">Premium Protection</h4>
                                     <p className="text-gray-400 text-xs">Comprehensive warranty included</p>
                                 </div>
                                 <div className="text-center">
                                     <div className="mb-3 flex justify-center">
-                                        <Clock size={32} className="text-amber-300" />
+                                        <Clock size={32} className="text-green-500" />
                                     </div>
                                     <h4 className="text-white text-sm font-medium mb-1">24/7 Support</h4>
                                     <p className="text-gray-400 text-xs">Dedicated concierge service</p>
                                 </div>
                                 <div className="text-center">
                                     <div className="mb-3 flex justify-center">
-                                        <User size={32} className="text-amber-300" />
+                                        <User size={32} className="text-green-500" />
                                     </div>
                                     <h4 className="text-white text-sm font-medium mb-1">Expert Consultation</h4>
                                     <p className="text-gray-400 text-xs">Personalized vehicle assistance</p>
@@ -533,8 +533,8 @@ const CarDetails = () => {
 
                     {/* Footer Branding */}
                     <div className=" text-center">
-                        <div className="text-amber-300 uppercase tracking-widest text-sm font-light mb-2">LUXURY AUTOMOTIVE GROUP</div>
-                        <div className="text-gray-500 text-sm">© {new Date().getFullYear()} Luxury Motors. All rights reserved.</div>
+                        <div className="text-green-500 uppercase tracking-widest text-sm font-light mb-2">LUXURY AUTOMOTIVE GROUP</div>
+                        <div className="text-gray-400 text-sm">© {new Date().getFullYear()} Luxury Motors. All rights reserved.</div>
                     </div>
                 </div>
             </div>

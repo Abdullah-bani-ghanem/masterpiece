@@ -10,9 +10,8 @@ import Footer from "./Component/Footer";
 import Payment from "./Pages/Payment"
 import FormCar from "./Pages/FormCar"
 import UserProfile from "./Pages/UserProfile";
-// import UserProfile from "./Pages/UserProfile";
 import CarDetails from '../src/Pages/CarDetails';
-// import Cars from '../src/Pages/Cars';
+
 
 
 import AdminLayout from "../../frontEnd/src/admin-dashboard/pages/AdminLayout";
@@ -27,10 +26,9 @@ import NewUser from "../src/admin-dashboard/pages/NewUser";
 import EditUser from "../src/admin-dashboard/pages/EditUser";
 import CarView from "../src/admin-dashboard/pages/CarView";
 import Messages from "../src/admin-dashboard/pages/Messages";
-import AdminRoute from "../src/Pages/AdminRoute";
+// import AdminRoute from "../src/Pages/AdminRoute";
 import Comment from "../src/admin-dashboard/pages/Comment";
-// import Orders from "../../frontEnd/src/admin-dashboard/pages/Orders";
-// import Users from "../../frontEnd/src/admin-dashboard/pages/Users";
+
 
 
 import React from 'react'

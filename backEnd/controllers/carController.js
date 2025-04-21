@@ -326,6 +326,18 @@ exports.getApprovedCars = async (req, res) => {
 
 
 
+// دالة لجلب عدد السيارات المعتمدة
+exports.getApprovedCarCount = async (req, res) => {
+  try {
+    const approvedCarCount = await Car.countDocuments({ status: 'approved' });  // عدد السيارات المعتمدة
+    res.json({ approvedCarCount });
+  } catch (err) {
+    console.error('Error fetching approved car count:', err);
+    res.status(500).json({ message: 'Failed to load approved car count.' });
+  }
+};
+
+
 
 
 
